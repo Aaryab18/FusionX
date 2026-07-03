@@ -76,18 +76,45 @@ export default function Ideas() {
 }
 
   async function handleVote(idea: Idea) {
-    setVotingId(idea.id);
-    const { error: err } = await supabase
-      .from('ideas')
-      .update({ votes: idea.votes + 1 })
-      .eq('id', idea.id);
-    if (!err) {
-      setIdeas((prev) =>
-        prev.map((i) => (i.id === idea.id ? { ...i, votes: i.votes + 1 } : i))
-      );
-    }
-    setVotingId(null);
+
+  // Get previously voted ideas from browser
+  const votedIdeas = JSON.parse(
+    localStorage.getItem("votedIdeas") || "[]"
+  );
+
+  // Check if already voted
+  if (votedIdeas.includes(idea.id)) {
+    alert("You have already voted for this idea.");
+    return;
   }
+
+  setVotingId(idea.id);
+
+  const { error: err } = await supabase
+    .from("ideas")
+    .update({ votes: idea.votes + 1 })
+    .eq("id", idea.id);
+
+  if (!err) {
+    // Save this vote in browser
+    votedIdeas.push(idea.id);
+    localStorage.setItem(
+      "votedIdeas",
+      JSON.stringify(votedIdeas)
+    );
+
+    // Update UI immediately
+    setIdeas((prev) =>
+      prev.map((i) =>
+        i.id === idea.id ? { ...i, votes: i.votes + 1 } : i
+      )
+    );
+  } else {
+    alert("Failed to vote. Please try again.");
+  }
+
+  setVotingId(null);
+}
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
