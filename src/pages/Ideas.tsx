@@ -46,23 +46,34 @@ export default function Ideas() {
   }
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    const { error: err } = await supabase.from('ideas').insert([form]);
-    if (err) {
-      setError('Something went wrong. Please try again.');
-    } else {
-      setSuccess(true);
-      setForm(initialForm);
-      fetchIdeas();
-      setTimeout(() => {
-        setSuccess(false);
-        setShowForm(false);
-      }, 2500);
-    }
-    setLoading(false);
+  e.preventDefault();
+
+  setLoading(true);
+  setError("");
+  setSuccess(false);
+
+  console.log("Submitting form:", form);
+
+  const { data, error } = await supabase
+    .from("ideas")
+    .insert([form])
+    .select();
+
+  console.log("Returned data:", data);
+  console.log("Returned error:", error);
+
+  if (error) {
+    alert(error.message);
+    setError(error.message);
+  } else {
+    alert("Idea submitted successfully!");
+    setSuccess(true);
+    setForm(initialForm);
+    await fetchIdeas();
   }
+
+  setLoading(false);
+}
 
   async function handleVote(idea: Idea) {
     setVotingId(idea.id);
