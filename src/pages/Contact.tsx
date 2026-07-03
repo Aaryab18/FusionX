@@ -2,9 +2,21 @@ import { useState } from 'react';
 import { Mail, MapPin, Send, Github, Twitter, Linkedin, Instagram, MessageSquare, CheckCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-type FormData = { name: string; email: string; message: string };
-const initialForm: FormData = { name: '', email: '', message: '' };
+type FormData = {
+  name: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+};
 
+const initialForm: FormData = {
+  name: '',
+  email: '',
+  phone: '',
+  subject: '',
+  message: '',
+};
 const socials = [
   { icon: Github, label: 'GitHub', handle: '@fusionhubtechlab', href: '#', color: 'hover:text-white hover:bg-white/10' },
   { icon: Twitter, label: 'Twitter / X', handle: '@fusionhub', href: '#', color: 'hover:text-cyan-400 hover:bg-cyan-400/10' },
@@ -166,6 +178,34 @@ export default function Contact() {
                       onChange={handleChange}
                       placeholder="alex@college.edu"
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/8 transition-all duration-200 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-sm font-medium mb-2">
+                    Mobile Number *
+                    </label>
+                    <input
+                    type="tel"
+                    name="phone"
+                    required
+                    value={form.phone}
+                    onChange={handleChange}
+                    placeholder="9876543210"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/8 transition-all duration-200 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-sm font-medium mb-2">
+                    Subject *
+                    </label>
+                    <input
+                    type="text"
+                    name="subject"
+                    required
+                    value={form.subject}
+                    onChange={handleChange}
+                    placeholder="Want to Join FusionX"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/8 transition-all duration-200 text-sm"
                     />
                   </div>
                   <div>
