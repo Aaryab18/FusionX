@@ -249,18 +249,7 @@ export default function Events() {
         </div>
       </section>
 
-      {/* Past */}
-      <section className="py-16 pb-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-1 h-8 rounded-full bg-gradient-to-b from-gray-600 to-gray-700" />
-            <h2 className="text-3xl font-black text-gray-300">Past Events</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 opacity-80">
-            {past.map((e) => <EventCard key={e.id} event={e} />)}
-          </div>
-        </div>
-      </section>
+      
     </div>
   );
 }
