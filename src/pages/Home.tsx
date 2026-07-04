@@ -36,10 +36,10 @@ const features = [
 ];
 
 const stats = [
-  { value: '50+', label: 'Projects Built' },
-  { value: '200+', label: 'Active Members' },
-  { value: '30+', label: 'Mentors' },
-  { value: '15+', label: 'Events/Year' },
+  { value: "2026", label: "Founded" },
+  { value: "Open", label: "Member Registrations" },
+  { value: "∞", label: "Ideas Welcome" },
+  { value: "1", label: "Mission" },
 ];
 
 const workflow = [
