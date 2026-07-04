@@ -37,10 +37,11 @@ export default function Ideas() {
   async function fetchIdeas() {
     setLoadingIdeas(true);
     const { data } = await supabase
-      .from('ideas')
-      .select('*')
-      .order('votes', { ascending: false })
-      .order('created_at', { ascending: false });
+  .from("ideas")
+  .select("*")
+  .eq("status", "Idea")
+  .order("votes", { ascending: false })
+  .order("created_at", { ascending: false });
     if (data) setIdeas(data as Idea[]);
     setLoadingIdeas(false);
   }
@@ -55,9 +56,16 @@ export default function Ideas() {
   console.log("Submitting form:", form);
 
   const { data, error } = await supabase
-    .from("ideas")
-    .insert([form])
-    .select();
+  .from("ideas")
+  .insert([
+    {
+      ...form,
+      status: "Idea",
+      team: "Seeking Team",
+      votes: 0,
+    },
+  ])
+  .select();
 
   console.log("Returned data:", data);
   console.log("Returned error:", error);
