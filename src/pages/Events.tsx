@@ -22,91 +22,102 @@ type Event = {
 const events: Event[] = [
   {
     id: 1,
-    title: 'HackFusion 2025',
-    type: 'Hackathon',
-    date: 'May 15–16, 2025',
-    time: '9:00 AM – 6:00 PM',
-    venue: 'Innovation Hub, Block C',
+    title: 'FusionX Club Launch',
+    type: 'Club Event',
+    date: 'Coming Soon',
+    time: 'TBA',
+    venue: 'College Auditorium',
     attendees: 0,
-    maxAttendees: 150,
-    description: '36-hour hackathon where teams of 2–4 build solutions for real-world challenges in education, healthcare, and sustainability.',
+    maxAttendees: 200,
+    description:
+      'Join us for the official launch of FusionX! Meet the core team, explore our vision, upcoming projects, and opportunities to innovate together.',
     status: 'upcoming',
-    icon: Trophy,
-    color: 'from-yellow-500 to-orange-500',
-    prizes: '₹50,000 in prizes',
+    icon: Users,
+    color: 'from-cyan-500 to-blue-500',
   },
+
   {
     id: 2,
-    title: 'Web Dev Bootcamp',
+    title: 'Web Development Bootcamp',
     type: 'Workshop',
-    date: 'April 28, 2025',
-    time: '10:00 AM – 4:00 PM',
-    venue: 'Lab 204, CS Block',
-    attendees: 45,
-    maxAttendees: 60,
-    description: 'Intensive one-day workshop covering React, Tailwind CSS, and Supabase. Build a full-stack app from scratch by end of day.',
+    date: 'Coming Soon',
+    time: '10:00 AM - 4:00 PM',
+    venue: 'Computer Lab',
+    attendees: 0,
+    maxAttendees: 100,
+    description:
+      'Learn HTML, CSS, JavaScript, React, Git and Tailwind CSS by building your first full-stack web application.',
     status: 'upcoming',
     icon: Code2,
     color: 'from-blue-500 to-cyan-500',
-    speakers: ['Aryan Sharma', 'Rahul Verma'],
+    speakers: ['FusionX Core Team'],
   },
+
   {
     id: 3,
-    title: 'AI/ML Workshop Series',
-    type: 'Workshop',
-    date: 'May 5, 12, 19, 2025',
-    time: '3:00 PM – 5:00 PM',
-    venue: 'Seminar Hall A',
-    attendees: 30,
-    maxAttendees: 80,
-    description: 'Three-week intensive covering Python for ML, neural networks, and deploying AI models to production using modern tools.',
+    title: 'Introduction to AI & Prompt Engineering',
+    type: 'Seminar',
+    date: 'Coming Soon',
+    time: '2:00 PM - 5:00 PM',
+    venue: 'Seminar Hall',
+    attendees: 0,
+    maxAttendees: 120,
+    description:
+      'Explore Artificial Intelligence, ChatGPT, prompt engineering and practical AI tools every student should know.',
     status: 'upcoming',
     icon: Cpu,
     color: 'from-green-500 to-emerald-500',
-    speakers: ['Ananya Roy', 'Dr. Vijay Kumar'],
+    speakers: ['Faculty Guest', 'FusionX Team'],
   },
+
   {
     id: 4,
-    title: 'FusionX Launch Demo Day',
-    type: 'Showcase',
-    date: 'March 22, 2025',
-    time: '2:00 PM – 6:00 PM',
-    venue: 'Auditorium',
-    attendees: 200,
-    maxAttendees: 200,
-    description: 'Six teams presented their semester-long projects to industry judges, faculty, and 200+ attendees. Three projects won funding offers.',
-    status: 'past',
-    icon: BookOpen,
-    color: 'from-pink-500 to-rose-500',
+    title: 'FusionX Idea Pitch Day',
+    type: 'Innovation',
+    date: 'Coming Soon',
+    time: '11:00 AM - 3:00 PM',
+    venue: 'Innovation Center',
+    attendees: 0,
+    maxAttendees: 80,
+    description:
+      'Present your innovative ideas, receive valuable feedback and build teams to transform ideas into real-world projects.',
+    status: 'upcoming',
+    icon: Trophy,
+    color: 'from-yellow-500 to-orange-500',
   },
+
   {
     id: 5,
-    title: 'Git & GitHub Workshop',
-    type: 'Workshop',
-    date: 'February 14, 2025',
-    time: '10:00 AM – 1:00 PM',
-    venue: 'Lab 102, CS Block',
-    attendees: 120,
-    maxAttendees: 120,
-    description: 'Beginner-friendly workshop covering version control fundamentals, branching, pull requests, and collaborative workflows.',
-    status: 'past',
-    icon: Code2,
-    color: 'from-gray-500 to-slate-500',
-  },
-  {
-    id: 6,
-    title: 'Ideathon Winter 2024',
-    type: 'Ideathon',
-    date: 'December 10, 2024',
-    time: '9:00 AM – 5:00 PM',
-    venue: 'Innovation Hub',
-    attendees: 80,
-    maxAttendees: 100,
-    description: '30 teams pitched ideas in 5 minutes each. Top 6 ideas were selected for the next semester\'s development cycle.',
-    status: 'past',
+    title: 'Mini Hackathon',
+    type: 'Hackathon',
+    date: 'Coming Soon',
+    time: '9:00 AM - 6:00 PM',
+    venue: 'Innovation Lab',
+    attendees: 0,
+    maxAttendees: 150,
+    description:
+      'A one-day coding challenge where teams collaborate to build innovative solutions for real-world problems.',
+    status: 'upcoming',
     icon: Trophy,
     color: 'from-orange-500 to-red-500',
-    prizes: 'Top 6 ideas funded',
+    prizes: 'Certificates & Exciting Rewards',
+  },
+
+  {
+    id: 6,
+    title: 'Open Source Contribution Workshop',
+    type: 'Workshop',
+    date: 'Coming Soon',
+    time: '1:00 PM - 4:00 PM',
+    venue: 'Computer Lab',
+    attendees: 0,
+    maxAttendees: 100,
+    description:
+      'Learn Git, GitHub, branching, pull requests and contribute to your first open-source project.',
+    status: 'upcoming',
+    icon: BookOpen,
+    color: 'from-purple-500 to-indigo-500',
+    speakers: ['FusionX Mentors'],
   },
 ];
 
@@ -200,7 +211,6 @@ function EventCard({ event }: { event: Event }) {
 
 export default function Events() {
   const upcoming = events.filter((e) => e.status === 'upcoming');
-  const past = events.filter((e) => e.status === 'past');
 
   return (
     <div className="min-h-screen bg-[#050a14] text-white pt-16">
@@ -212,12 +222,14 @@ export default function Events() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4 block">Events</span>
           <h1 className="text-5xl sm:text-6xl font-black mb-6">
-            Where builders{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">gather</span>
-          </h1>
+  Building the{" "}
+  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+    Future Together
+  </span>
+</h1>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            From hackathons to workshops, every event is a chance to learn, build, and connect with the most passionate tech community on campus.
-          </p>
+  Join FusionX workshops, hackathons, technical sessions, and innovation events designed to help students learn, collaborate, and build impactful projects together.
+</p>
         </div>
       </section>
 
