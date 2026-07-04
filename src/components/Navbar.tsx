@@ -42,7 +42,7 @@ export default function Navbar() {
   <img
   src="/logo.png"
   alt="FusionX Logo"
-  className="w-11 h-11 object-contain transition-transform duration-300 group-hover:scale-105"
+  className="w-12 h-12 object-contain transition-transform duration-300 group-hover:scale-105"
 />
 
   <span className="font-bold text-xl tracking-tight">
