@@ -16,6 +16,8 @@ export default function ProtectedRoute({
         data: { session },
       } = await supabase.auth.getSession();
 
+      console.log("Session:", session);
+
       setLoggedIn(!!session);
       setLoading(false);
     }
