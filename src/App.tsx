@@ -11,6 +11,7 @@ import Resources from './pages/Resources';
 import Contact from './pages/Contact';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
   return (
@@ -28,7 +29,14 @@ export default function App() {
             <Route path="/resources" element={<Resources />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/dashboard" element={<AdminDashboard />} />
+            <Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <AdminDashboard />
+    </ProtectedRoute>
+  }
+/>
           </Routes>
         </main>
         <Footer />
