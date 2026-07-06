@@ -1,17 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+
+import type { Project } from "../../lib/supabase";
 
 type Props = {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+
+  project?: Project | null;
 };
 
 export default function ProjectFormModal({
   open,
   onClose,
   onSuccess,
+  project,
 }: Props) {
   const [loading, setLoading] = useState(false);
 
@@ -27,6 +32,36 @@ export default function ProjectFormModal({
     featured: false,
     team_members: "",
   });
+
+  useEffect(() => {
+  if (project) {
+    setForm({
+      title: project.title,
+      description: project.description,
+      category: project.category,
+      tech_stack: project.tech_stack,
+      github_url: project.github_url || "",
+      demo_url: project.demo_url || "",
+      image_url: project.image_url || "",
+      status: project.status,
+      featured: project.featured,
+      team_members: project.team_members || "",
+    });
+  } else {
+    setForm({
+      title: "",
+      description: "",
+      category: "",
+      tech_stack: "",
+      github_url: "",
+      demo_url: "",
+      image_url: "",
+      status: "Planning",
+      featured: false,
+      team_members: "",
+    });
+  }
+}, [project, open]);
 
   function handleChange(
     e: React.ChangeEvent<
@@ -51,7 +86,24 @@ export default function ProjectFormModal({
 
     setLoading(true);
 
-    const { error } = await supabase
+    const query = project
+  ? supabase
+      .from("projects")
+      .update({
+        title: form.title,
+        description: form.description,
+        category: form.category,
+        tech_stack: form.tech_stack,
+        github_url: form.github_url || null,
+        demo_url: form.demo_url || null,
+        image_url: form.image_url || null,
+        status: form.status,
+        featured: form.featured,
+        team_members: form.team_members || null,
+      })
+      .eq("id", project.id)
+
+  : supabase
       .from("projects")
       .insert([
         {
@@ -67,6 +119,8 @@ export default function ProjectFormModal({
           team_members: form.team_members || null,
         },
       ]);
+
+const { error } = await query;
 
     setLoading(false);
 
@@ -104,8 +158,8 @@ export default function ProjectFormModal({
         <div className="flex items-center justify-between border-b border-white/10 p-6">
 
           <h2 className="text-2xl font-bold text-white">
-            Add New Project
-          </h2>
+  {project ? "Edit Project" : "Add New Project"}
+</h2>
 
           <button
             onClick={onClose}
@@ -312,7 +366,11 @@ export default function ProjectFormModal({
               disabled={loading}
               className="px-5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white font-semibold transition disabled:opacity-50"
             >
-              {loading ? "Saving..." : "Save Project"}
+              {loading
+  ? "Saving..."
+  : project
+  ? "Update Project"
+  : "Save Project"}
             </button>
 
           </div>
