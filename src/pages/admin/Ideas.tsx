@@ -138,6 +138,8 @@ export default function Ideas() {
 
               <th className="text-left px-5 py-4">Votes</th>
 
+              <th className="text-left px-5 py-4">team</th>
+
               <th className="text-left px-5 py-4">Status</th>
 
               <th className="text-left px-5 py-4">Actions</th>
@@ -184,16 +186,17 @@ export default function Ideas() {
                   </td>
 
                   <td className="px-5 py-4">
-  {idea.team ?? "Seeking Team"}
-</td>
-
-                  <td className="px-5 py-4">
                     {idea.year}
                   </td>
 
                   <td className="px-5 py-4">
                     {idea.votes}
                   </td>
+
+                  <td className="px-5 py-4">
+  {idea.team ?? "Seeking Team"}
+</td>
+
 
                   <td className="px-5 py-4">
                     <span
