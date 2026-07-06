@@ -21,6 +21,7 @@ export type Idea = {
   created_at: string;
   status: string;
   usn: string;
+  team: string;
 };
 export type Project = {
   id: string;

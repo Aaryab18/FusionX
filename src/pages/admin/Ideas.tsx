@@ -184,6 +184,10 @@ export default function Ideas() {
                   </td>
 
                   <td className="px-5 py-4">
+  {idea.team ?? "Seeking Team"}
+</td>
+
+                  <td className="px-5 py-4">
                     {idea.year}
                   </td>
 

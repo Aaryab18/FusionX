@@ -57,13 +57,18 @@ export default function Ideas() {
 
   console.log("Submitting form:", form);
 
-  const { data, error } = await supabase
+ const { data, error } = await supabase
   .from("ideas")
   .insert([
     {
-      ...form,
-      status: "Idea",
+      name: form.name,
+      usn: form.usn,
+      year: form.year,
+      idea_title: form.idea_title,
+      description: form.description,
+      skills_required: form.skills_required,
       team: "Seeking Team",
+      status: "Idea",
       votes: 0,
     },
   ])
@@ -333,24 +338,60 @@ export default function Ideas() {
                         {idea.votes}
                       </button>
                     </div>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-3 line-clamp-2">{idea.description}</p>
-                    <div className="flex items-center justify-between flex-wrap gap-2">
-                      <div className="flex items-center gap-2 text-xs text-gray-600">
-                        <span className="font-medium text-gray-500">{idea.name}</span>
-                        <span>·</span>
-                        <span>{idea.year}</span>
-                        {idea.skills_required && (
-                          <>
-                            <span>·</span>
-                            <span className="text-blue-400 truncate max-w-[140px]">{idea.skills_required}</span>
-                          </>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-1 text-gray-600 text-xs">
-                        <Clock size={11} />
-                        {new Date(idea.created_at).toLocaleDateString()}
-                      </div>
-                    </div>
+                    <p className="text-gray-500 text-sm leading-relaxed mb-3 line-clamp-2">
+  {idea.description}
+</p>
+
+<div className="space-y-2">
+
+  <div className="flex flex-wrap items-center gap-2 text-xs">
+
+    <span className="font-medium text-gray-400">
+      👤 {idea.name}
+    </span>
+
+    <span className="text-gray-600">•</span>
+
+    <span className="text-gray-400">
+      🆔 {idea.usn}
+    </span>
+
+    <span className="text-gray-600">•</span>
+
+    <span className="text-gray-400">
+      🎓 {idea.year}
+    </span>
+
+    {idea.skills_required && (
+      <>
+        <span className="text-gray-600">•</span>
+
+        <span className="text-blue-400">
+          💻 {idea.skills_required}
+        </span>
+      </>
+    )}
+
+    <span className="text-gray-600">•</span>
+
+    <span
+      className={`px-2 py-1 rounded-full text-xs font-semibold ${
+        idea.team === "Seeking Team"
+          ? "bg-green-500/20 text-green-400"
+          : "bg-blue-500/20 text-blue-400"
+      }`}
+    >
+      👥 {idea.team || "Seeking Team"}
+    </span>
+
+  </div>
+
+  <div className="flex items-center gap-1 text-gray-600 text-xs">
+    <Clock size={11} />
+    {new Date(idea.created_at).toLocaleDateString()}
+  </div>
+
+</div>
                   </div>
                 ))}
               </div>
