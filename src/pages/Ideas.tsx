@@ -6,6 +6,7 @@ const years = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 
 type FormData = {
   name: string;
+  usn: string;
   year: string;
   idea_title: string;
   description: string;
@@ -14,6 +15,7 @@ type FormData = {
 
 const initialForm: FormData = {
   name: '',
+  usn: '',
   year: '',
   idea_title: '',
   description: '',
@@ -184,6 +186,21 @@ export default function Ideas() {
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-yellow-500/50 focus:bg-white/8 transition-all duration-200 text-sm"
                     />
                   </div>
+                  <div>
+  <label className="block text-gray-400 text-sm font-medium mb-2">
+    USN *
+  </label>
+
+  <input
+    type="text"
+    name="usn"
+    required
+    value={form.usn}
+    onChange={handleChange}
+    placeholder="1MS22CS001"
+    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-yellow-500/50 focus:bg-white/8 transition-all duration-200 text-sm"
+  />
+</div>
                   <div>
                     <label className="block text-gray-400 text-sm font-medium mb-2">Academic Year *</label>
                     <select

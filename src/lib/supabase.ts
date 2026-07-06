@@ -20,6 +20,7 @@ export type Idea = {
   votes: number;
   created_at: string;
   status: string;
+  usn: string;
 };
 
 export type ContactMessage = {

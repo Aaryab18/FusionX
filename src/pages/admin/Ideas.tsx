@@ -1,3 +1,4 @@
+import IdeaFormModal from "../../components/admin/IdeaFormModal";
 import { useEffect, useState } from "react";
 import { supabase, Idea } from "../../lib/supabase";
 import { Search, Trash2, Play, Check } from "lucide-react";
@@ -6,6 +7,7 @@ export default function Ideas() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     fetchIdeas();
@@ -82,15 +84,26 @@ export default function Ideas() {
   return (
     <div className="space-y-6">
 
-      <div>
-        <h1 className="text-3xl font-bold text-white">
-          Manage Ideas
-        </h1>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-        <p className="text-gray-400 mt-2">
-          View all submitted ideas from students.
-        </p>
-      </div>
+  <div>
+    <h1 className="text-3xl font-bold text-white">
+      Manage Ideas
+    </h1>
+
+    <p className="text-gray-400 mt-2">
+      View all submitted ideas from students.
+    </p>
+  </div>
+
+  <button
+    onClick={() => setOpenModal(true)}
+    className="px-5 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold"
+  >
+    + Add New Idea
+  </button>
+
+</div>
 
       <div className="relative max-w-md">
         <Search
@@ -117,6 +130,8 @@ export default function Ideas() {
 
               <th className="text-left px-5 py-4">Name</th>
 
+              <th className="text-left px-5 py-4">USN</th>
+
               <th className="text-left px-5 py-4">Idea</th>
 
               <th className="text-left px-5 py-4">Year</th>
@@ -135,7 +150,7 @@ export default function Ideas() {
                       {loading ? (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={7}
                   className="text-center py-8 text-gray-400"
                 >
                   Loading ideas...
@@ -144,7 +159,7 @@ export default function Ideas() {
             ) : filtered.length === 0 ? (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={7}
                   className="text-center py-8 text-gray-400"
                 >
                   No ideas found.
@@ -159,6 +174,10 @@ export default function Ideas() {
                   <td className="px-5 py-4">
                     {idea.name}
                   </td>
+
+                  <td className="px-5 py-4">
+  {idea.usn}
+</td>
 
                   <td className="px-5 py-4 font-medium">
                     {idea.idea_title}
@@ -246,6 +265,12 @@ export default function Ideas() {
           </tbody>
         </table>
       </div>
-    </div>
-  );
+    <IdeaFormModal
+  open={openModal}
+  onClose={() => setOpenModal(false)}
+  onSuccess={fetchIdeas}
+/>
+
+</div>
+);
 }
