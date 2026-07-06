@@ -19,6 +19,7 @@ export type Idea = {
   skills_required: string;
   votes: number;
   created_at: string;
+  status: string;
 };
 
 export type ContactMessage = {
