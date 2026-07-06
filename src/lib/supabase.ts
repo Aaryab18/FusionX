@@ -22,6 +22,20 @@ export type Idea = {
   status: string;
   usn: string;
 };
+export type Project = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  tech_stack: string;
+  github_url: string | null;
+  demo_url: string | null;
+  image_url: string | null;
+  status: string;
+  featured: boolean;
+  team_members: string | null;
+  created_at: string;
+};
 
 export type ContactMessage = {
   id?: string;
