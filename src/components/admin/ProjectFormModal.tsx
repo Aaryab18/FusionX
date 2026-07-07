@@ -129,7 +129,11 @@ const { error } = await query;
       return;
     }
 
-    alert("Project added successfully!");
+    alert(
+  project
+    ? "Project updated successfully!"
+    : "Project added successfully!"
+);
 
     setForm({
       title: "",

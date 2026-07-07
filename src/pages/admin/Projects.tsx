@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Trash2 } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 import { supabase, Project } from "../../lib/supabase";
 import ProjectFormModal from "../../components/admin/ProjectFormModal";
 
@@ -8,6 +8,7 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   async function fetchProjects() {
     setLoading(true);
@@ -74,7 +75,10 @@ export default function Projects() {
         </div>
 
         <button
-          onClick={() => setOpenModal(true)}
+          onClick={() => {
+  setSelectedProject(null);
+  setOpenModal(true);
+}}
           className="px-5 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold"
         >
           + Add Project
@@ -188,17 +192,35 @@ export default function Projects() {
                   </td>
 
                   <td className="px-5 py-4">
-                    <button
-                      onClick={() => deleteProject(project.id)}
-                      className="p-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 transition"
-                      title="Delete Project"
-                    >
-                      <Trash2
-                        size={18}
-                        className="text-red-400"
-                      />
-                    </button>
-                  </td>
+  <div className="flex items-center gap-2">
+
+    <button
+      onClick={() => {
+        setSelectedProject(project);
+        setOpenModal(true);
+      }}
+      className="p-2 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 transition"
+      title="Edit Project"
+    >
+      <Pencil
+        size={18}
+        className="text-blue-400"
+      />
+    </button>
+
+    <button
+      onClick={() => deleteProject(project.id)}
+      className="p-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 transition"
+      title="Delete Project"
+    >
+      <Trash2
+        size={18}
+        className="text-red-400"
+      />
+    </button>
+
+  </div>
+</td>
                 </tr>
               ))
             )}
@@ -209,10 +231,14 @@ export default function Projects() {
       </div>
 
       <ProjectFormModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        onSuccess={fetchProjects}
-      />
+  open={openModal}
+  project={selectedProject}
+  onClose={() => {
+    setOpenModal(false);
+    setSelectedProject(null);
+  }}
+  onSuccess={fetchProjects}
+/>
 
     </div>
   );
