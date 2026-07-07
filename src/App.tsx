@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import ProjectShowcase from "./pages/ProjectShowcase";
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -49,12 +49,27 @@ export default function App() {
         />
 
         <Route path="/about" element={<WebsiteLayout><About /></WebsiteLayout>} />
-        <Route path="/projects" element={<WebsiteLayout><Projects /></WebsiteLayout>} />
+        <Route
+  path="/community-projects"
+  element={
+    <WebsiteLayout>
+      <Projects />
+    </WebsiteLayout>
+  }
+/>
         <Route path="/ideas" element={<WebsiteLayout><Ideas /></WebsiteLayout>} />
         <Route path="/events" element={<WebsiteLayout><Events /></WebsiteLayout>} />
         <Route path="/team" element={<WebsiteLayout><Team /></WebsiteLayout>} />
         <Route path="/resources" element={<WebsiteLayout><Resources /></WebsiteLayout>} />
         <Route path="/contact" element={<WebsiteLayout><Contact /></WebsiteLayout>} />
+        <Route
+  path="/projects"
+  element={
+    <WebsiteLayout>
+      <ProjectShowcase />
+    </WebsiteLayout>
+  }
+/>
 
         {/* Admin Login */}
         <Route path="/admin" element={<AdminLogin />} />
