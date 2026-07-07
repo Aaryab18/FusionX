@@ -21,17 +21,19 @@ export default function ProjectFormModal({
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-    title: "",
-    description: "",
-    category: "",
-    tech_stack: "",
-    github_url: "",
-    demo_url: "",
-    image_url: "",
-    status: "Planning",
-    featured: false,
-    team_members: "",
-  });
+  title: "",
+  slug: "",
+  short_description: "",
+  description: "",
+  category: "",
+  tech_stack: "",
+  github_url: "",
+  demo_url: "",
+  image_url: "",
+  status: "Planning",
+  featured: false,
+  team_members: "",
+});
 
   useEffect(() => {
   if (project) {
@@ -39,7 +41,9 @@ export default function ProjectFormModal({
       title: project.title,
       description: project.description,
       category: project.category,
-      tech_stack: project.tech_stack,
+      tech_stack: project.tech_stack.join(", "),
+      slug: project.slug || "",
+short_description: project.short_description || "",
       github_url: project.github_url || "",
       demo_url: project.demo_url || "",
       image_url: project.image_url || "",
@@ -49,17 +53,19 @@ export default function ProjectFormModal({
     });
   } else {
     setForm({
-      title: "",
-      description: "",
-      category: "",
-      tech_stack: "",
-      github_url: "",
-      demo_url: "",
-      image_url: "",
-      status: "Planning",
-      featured: false,
-      team_members: "",
-    });
+  title: "",
+  slug: "",
+  short_description: "",
+  description: "",
+  category: "",
+  tech_stack: "",
+  github_url: "",
+  demo_url: "",
+  image_url: "",
+  status: "Planning",
+  featured: false,
+  team_members: "",
+});
   }
 }, [project, open]);
 
@@ -93,7 +99,12 @@ export default function ProjectFormModal({
         title: form.title,
         description: form.description,
         category: form.category,
-        tech_stack: form.tech_stack,
+        tech_stack: form.tech_stack
+  .split(",")
+  .map((t) => t.trim())
+  .filter(Boolean),
+  slug: form.slug || null,
+short_description: form.short_description || null,
         github_url: form.github_url || null,
         demo_url: form.demo_url || null,
         image_url: form.image_url || null,
@@ -104,21 +115,26 @@ export default function ProjectFormModal({
       .eq("id", project.id)
 
   : supabase
-      .from("projects")
-      .insert([
-        {
-          title: form.title,
-          description: form.description,
-          category: form.category,
-          tech_stack: form.tech_stack,
-          github_url: form.github_url || null,
-          demo_url: form.demo_url || null,
-          image_url: form.image_url || null,
-          status: form.status,
-          featured: form.featured,
-          team_members: form.team_members || null,
-        },
-      ]);
+    .from("projects")
+    .insert([
+      {
+        title: form.title,
+        slug: form.slug || null,
+        short_description: form.short_description || null,
+        description: form.description,
+        category: form.category,
+        tech_stack: form.tech_stack
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean),
+        github_url: form.github_url || null,
+        demo_url: form.demo_url || null,
+        image_url: form.image_url || null,
+        status: form.status,
+        featured: form.featured,
+        team_members: form.team_members || null,
+      },
+    ]);
 
 const { error } = await query;
 
@@ -136,17 +152,19 @@ const { error } = await query;
 );
 
     setForm({
-      title: "",
-      description: "",
-      category: "",
-      tech_stack: "",
-      github_url: "",
-      demo_url: "",
-      image_url: "",
-      status: "Planning",
-      featured: false,
-      team_members: "",
-    });
+  title: "",
+  slug: "",
+  short_description: "",
+  description: "",
+  category: "",
+  tech_stack: "",
+  github_url: "",
+  demo_url: "",
+  image_url: "",
+  status: "Planning",
+  featured: false,
+  team_members: "",
+});
 
     onSuccess();
     onClose();
@@ -194,6 +212,34 @@ const { error } = await query;
                 className="w-full rounded-lg bg-[#111827] border border-white/10 px-4 py-3 text-white"
               />
             </div>
+
+            <div>
+  <label className="block text-sm font-medium text-gray-300 mb-2">
+    Slug
+  </label>
+  <input
+    type="text"
+    name="slug"
+    value={form.slug}
+    onChange={handleChange}
+    placeholder="ai-attendance-system"
+    className="w-full rounded-xl bg-[#0f172a] border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-cyan-500"
+  />
+</div>
+
+<div>
+  <label className="block text-sm font-medium text-gray-300 mb-2">
+    Short Description
+  </label>
+  <textarea
+    name="short_description"
+    value={form.short_description}
+    onChange={handleChange}
+    rows={2}
+    placeholder="A short summary shown on project cards."
+    className="w-full rounded-xl bg-[#0f172a] border border-white/10 px-4 py-3 text-white focus:outline-none focus:border-cyan-500"
+  />
+</div>
 
             <div>
               <label className="block mb-2 text-sm text-gray-300">
