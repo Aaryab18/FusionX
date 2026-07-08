@@ -1,125 +1,24 @@
-import { Calendar, Clock, MapPin, Users, ArrowRight, Trophy, BookOpen, Code2, Cpu } from 'lucide-react';
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
+  ArrowRight,
+  Trophy,
+  Code2,
+} from "lucide-react";
+import { useState } from "react";
+import type { Event } from "../types/event";
+import { Link } from "react-router-dom";
+import { events } from "../data/events";
+import {
+  Container,
+  SectionHeading,
+  StatCard,
+  SearchInput,
+  Badge,
+} from "../components/ui";
 
-type EventStatus = 'upcoming' | 'past';
-
-type Event = {
-  id: number;
-  title: string;
-  type: string;
-  date: string;
-  time: string;
-  venue: string;
-  attendees: number;
-  maxAttendees: number;
-  description: string;
-  status: EventStatus;
-  icon: typeof Trophy;
-  color: string;
-  prizes?: string;
-  speakers?: string[];
-};
-
-const events: Event[] = [
-  {
-    id: 1,
-    title: 'FusionX Club Launch',
-    type: 'Club Event',
-    date: 'Coming Soon',
-    time: 'TBA',
-    venue: 'College Auditorium',
-    attendees: 0,
-    maxAttendees: 200,
-    description:
-      'Join us for the official launch of FusionX! Meet the core team, explore our vision, upcoming projects, and opportunities to innovate together.',
-    status: 'upcoming',
-    icon: Users,
-    color: 'from-cyan-500 to-blue-500',
-  },
-
-  {
-    id: 2,
-    title: 'Web Development Bootcamp',
-    type: 'Workshop',
-    date: 'Coming Soon',
-    time: '10:00 AM - 4:00 PM',
-    venue: 'Computer Lab',
-    attendees: 0,
-    maxAttendees: 100,
-    description:
-      'Learn HTML, CSS, JavaScript, React, Git and Tailwind CSS by building your first full-stack web application.',
-    status: 'upcoming',
-    icon: Code2,
-    color: 'from-blue-500 to-cyan-500',
-    speakers: ['FusionX Core Team'],
-  },
-
-  {
-    id: 3,
-    title: 'Introduction to AI & Prompt Engineering',
-    type: 'Seminar',
-    date: 'Coming Soon',
-    time: '2:00 PM - 5:00 PM',
-    venue: 'Seminar Hall',
-    attendees: 0,
-    maxAttendees: 120,
-    description:
-      'Explore Artificial Intelligence, ChatGPT, prompt engineering and practical AI tools every student should know.',
-    status: 'upcoming',
-    icon: Cpu,
-    color: 'from-green-500 to-emerald-500',
-    speakers: ['Faculty Guest', 'FusionX Team'],
-  },
-
-  {
-    id: 4,
-    title: 'FusionX Idea Pitch Day',
-    type: 'Innovation',
-    date: 'Coming Soon',
-    time: '11:00 AM - 3:00 PM',
-    venue: 'Innovation Center',
-    attendees: 0,
-    maxAttendees: 80,
-    description:
-      'Present your innovative ideas, receive valuable feedback and build teams to transform ideas into real-world projects.',
-    status: 'upcoming',
-    icon: Trophy,
-    color: 'from-yellow-500 to-orange-500',
-  },
-
-  {
-    id: 5,
-    title: 'Mini Hackathon',
-    type: 'Hackathon',
-    date: 'Coming Soon',
-    time: '9:00 AM - 6:00 PM',
-    venue: 'Innovation Lab',
-    attendees: 0,
-    maxAttendees: 150,
-    description:
-      'A one-day coding challenge where teams collaborate to build innovative solutions for real-world problems.',
-    status: 'upcoming',
-    icon: Trophy,
-    color: 'from-orange-500 to-red-500',
-    prizes: 'Certificates & Exciting Rewards',
-  },
-
-  {
-    id: 6,
-    title: 'Open Source Contribution Workshop',
-    type: 'Workshop',
-    date: 'Coming Soon',
-    time: '1:00 PM - 4:00 PM',
-    venue: 'Computer Lab',
-    attendees: 0,
-    maxAttendees: 100,
-    description:
-      'Learn Git, GitHub, branching, pull requests and contribute to your first open-source project.',
-    status: 'upcoming',
-    icon: BookOpen,
-    color: 'from-purple-500 to-indigo-500',
-    speakers: ['FusionX Mentors'],
-  },
-];
 
 function EventCard({ event }: { event: Event }) {
   const Icon = event.icon;
@@ -145,11 +44,9 @@ function EventCard({ event }: { event: Event }) {
             <Icon size={22} className="text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className={`text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md mb-2 inline-block ${
-              isUpcoming ? 'bg-blue-500/10 text-blue-400' : 'bg-white/5 text-gray-500'
-            }`}>
-              {event.type}
-            </span>
+            <Badge>
+  {event.type}
+</Badge>
             <h3 className="text-white font-bold text-xl leading-snug">{event.title}</h3>
           </div>
         </div>
@@ -198,19 +95,40 @@ function EventCard({ event }: { event: Event }) {
           </div>
         </div>
 
-        {isUpcoming && (
-          <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-blue-600/20 to-cyan-500/20 border border-blue-500/30 text-blue-300 text-sm font-semibold hover:from-blue-600/30 hover:to-cyan-500/30 hover:text-white transition-all duration-200 group">
-            Register Now
-            <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
-          </button>
-        )}
+        <div className="flex gap-3">
+  <Link
+    to={`/events/${event.slug}`}
+    className="flex-1 flex items-center justify-center rounded-xl border border-cyan-500 py-3 text-sm font-semibold text-cyan-400 transition hover:bg-cyan-500 hover:text-black"
+  >
+    View Details
+  </Link>
+
+  {isUpcoming && (
+    <button className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600/20 to-cyan-500/20 border border-blue-500/30 py-3 text-sm font-semibold text-blue-300 transition-all duration-200 hover:from-blue-600/30 hover:to-cyan-500/30 hover:text-white">
+      Register
+      <ArrowRight size={15} />
+    </button>
+  )}
+</div>
       </div>
     </div>
   );
 }
 
 export default function Events() {
-  const upcoming = events.filter((e) => e.status === 'upcoming');
+  const [search, setSearch] = useState("");
+
+const upcoming = events.filter(
+  (e) => e.status === "upcoming"
+);
+
+const featuredEvent =
+  upcoming.find((e) => e.featured) || upcoming[0];
+
+const filteredEvents = upcoming.filter((event) =>
+  event.title.toLowerCase().includes(search.toLowerCase()) ||
+  event.type.toLowerCase().includes(search.toLowerCase())
+);
 
   return (
     <div className="min-h-screen bg-[#050a14] text-white pt-16">
@@ -219,7 +137,7 @@ export default function Events() {
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-blue-600/8 rounded-full blur-3xl" />
         </div>
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Container className="text-center">
           <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4 block">Events</span>
           <h1 className="text-5xl sm:text-6xl font-black mb-6">
   Building the{" "}
@@ -230,24 +148,121 @@ export default function Events() {
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
   Join FusionX workshops, hackathons, technical sessions, and innovation events designed to help students learn, collaborate, and build impactful projects together.
 </p>
-        </div>
+        </Container>
       </section>
+
+      <section className="pb-8">
+  <Container>
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+
+      <StatCard
+        title="Upcoming Events"
+        value={upcoming.length}
+        color="cyan"
+      />
+
+      <StatCard
+        title="Workshops"
+        value={
+          events.filter(
+            (e) => e.type === "Workshop"
+          ).length
+        }
+        color="green"
+      />
+
+      <StatCard
+        title="Hackathons"
+        value={
+          events.filter(
+            (e) => e.type === "Hackathon"
+          ).length
+        }
+        color="yellow"
+      />
+
+    </div>
+  </Container>
+</section>
+
+<section className="pb-12">
+  <Container>
+
+    <SectionHeading
+      title="⭐ Featured Event"
+      subtitle="Don't miss our highlighted event"
+    />
+
+    {featuredEvent && (
+      <div className="mt-8 rounded-3xl overflow-hidden border border-white/10 bg-[#101827]">
+
+        <div className="grid lg:grid-cols-2">
+
+          <div
+  className={`flex items-center justify-center p-12 bg-gradient-to-br ${featuredEvent.color}`}
+>
+  <featuredEvent.icon size={90} className="text-white" />
+</div>
+
+          <div className="p-8 flex flex-col justify-center">
+
+            <Badge>
+              {featuredEvent.type}
+            </Badge>
+
+            <h2 className="mt-4 text-3xl font-bold">
+              {featuredEvent.title}
+            </h2>
+
+            <p className="mt-4 text-gray-400">
+              {featuredEvent.description}
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-6 text-sm text-gray-300">
+
+              <span>📅 {featuredEvent.date}</span>
+
+              <span>📍 {featuredEvent.venue}</span>
+
+              <span>👥 {featuredEvent.attendees} Attendees</span>
+
+            </div>
+
+            <button className="mt-8 w-fit rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-black hover:bg-cyan-400 transition">
+              Register Now
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+    )}
+
+  </Container>
+</section>
 
       {/* Upcoming */}
       <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-1 h-8 rounded-full bg-gradient-to-b from-blue-500 to-cyan-500" />
-            <h2 className="text-3xl font-black">Upcoming Events</h2>
-            <span className="ml-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-sm font-semibold border border-blue-500/20">
-              {upcoming.length} events
-            </span>
-          </div>
+        <Container>
+          <SectionHeading
+  title="Upcoming Events"
+  subtitle={`${upcoming.length} upcoming events available`}
+/>
+        
+          <div className="mt-8 mb-8">
+  <SearchInput
+    value={search}
+    onChange={setSearch}
+    placeholder="🔍 Search Events..."
+  />
+</div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {upcoming.map((e) => <EventCard key={e.id} event={e} />)}
+            {filteredEvents.map((e) => <EventCard key={e.id} event={e} />)}
           </div>
-        </div>
+        </Container>
       </section>
+      
 
       
     </div>

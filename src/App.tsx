@@ -5,7 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminLayout from './components/AdminLayout';
-
+import EventDetails from "./pages/EventDetails";
 import Home from './pages/Home';
 import About from './pages/About';
 import Projects from './pages/Projects';
@@ -63,6 +63,7 @@ export default function App() {
         <Route path="/team" element={<WebsiteLayout><Team /></WebsiteLayout>} />
         <Route path="/resources" element={<WebsiteLayout><Resources /></WebsiteLayout>} />
         <Route path="/contact" element={<WebsiteLayout><Contact /></WebsiteLayout>} />
+        <Route path="/events/:slug" element={<EventDetails />} />
         <Route
   path="/projects"
   element={
