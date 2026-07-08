@@ -1,3 +1,4 @@
+import ProjectDetails from "./pages/ProjectDetails";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProjectShowcase from "./pages/ProjectShowcase";
 import Navbar from './components/Navbar';
@@ -67,6 +68,14 @@ export default function App() {
   element={
     <WebsiteLayout>
       <ProjectShowcase />
+    </WebsiteLayout>
+  }
+/>
+<Route
+  path="/project/:slug"
+  element={
+    <WebsiteLayout>
+      <ProjectDetails />
     </WebsiteLayout>
   }
 />
