@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Lightbulb, Send, ThumbsUp, Clock, Tag, ChevronDown } from 'lucide-react';
 import { supabase, type Idea } from '../lib/supabase';
+import {
+  Container,
+  SectionHeading,
+  Badge,
+  EmptyState,
+} from "../components/ui";
 
 const years = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 
@@ -156,7 +162,7 @@ export default function Ideas() {
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+      <Container className="pb-24">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Submit Form */}
           <div>
@@ -297,15 +303,13 @@ export default function Ideas() {
 
           {/* Ideas List */}
           <div>
-            <h2 className="text-2xl font-black mb-6 flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                <Tag size={18} className="text-white" />
-              </div>
-              Community Ideas
-              <span className="ml-auto text-gray-600 text-sm font-normal">{ideas.length} ideas</span>
-            </h2>
+            <SectionHeading
+  title="Community Ideas"
+  subtitle={`${ideas.length} ideas shared by students`}
+/>
 
-            {loadingIdeas ? (
+<div className="mt-8">
+  {loadingIdeas ? (
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="bg-white/3 border border-white/8 rounded-2xl p-5 animate-pulse">
@@ -316,10 +320,10 @@ export default function Ideas() {
                 ))}
               </div>
             ) : ideas.length === 0 ? (
-              <div className="bg-white/3 border border-white/8 rounded-2xl p-12 text-center">
-                <Lightbulb size={40} className="text-gray-600 mx-auto mb-4" />
-                <p className="text-gray-500">No ideas yet. Be the first to submit one!</p>
-              </div>
+              <EmptyState
+  title="No Ideas Yet"
+  description="Be the first to submit an innovative idea."
+/>
             ) : (
               <div className="space-y-4 max-h-[700px] overflow-y-auto pr-1 custom-scroll">
                 {ideas.map((idea) => (
@@ -374,15 +378,9 @@ export default function Ideas() {
 
     <span className="text-gray-600">•</span>
 
-    <span
-      className={`px-2 py-1 rounded-full text-xs font-semibold ${
-        idea.team === "Seeking Team"
-          ? "bg-green-500/20 text-green-400"
-          : "bg-blue-500/20 text-blue-400"
-      }`}
-    >
-      👥 {idea.team || "Seeking Team"}
-    </span>
+    <Badge color={idea.team === "Seeking Team" ? "yellow" : "green"}>
+    👥 {idea.team}
+</Badge>
 
   </div>
 
@@ -393,12 +391,17 @@ export default function Ideas() {
 
 </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                              ))}
+            </div>
+          )}
         </div>
+
       </div>
+
     </div>
-  );
+
+  </Container>
+
+</div>
+);
 }
