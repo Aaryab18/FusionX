@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import type { Project } from "../lib/supabase";
 import ProjectCard from "../components/projects/ProjectCard";
+import Container from "../components/ui/Container";
+import SectionHeading from "../components/ui/SectionHeading";
+import StatCard from "../components/ui/StatCard";
+import SearchInput from "../components/ui/SearchInput";
 
 export default function ProjectShowcase() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -50,51 +54,42 @@ const categories = [
   }
 
   return (
-  <div className="min-h-screen bg-[#08111f] text-white pt-32 px-8">
+  <div className="min-h-screen bg-[#08111f] text-white pt-32">
+    <Container>
 
-      <h1 className="text-4xl font-bold mb-2">
-        Project Showcase
-      </h1>
+      <SectionHeading
+  title="Project Showcase"
+  subtitle="Explore projects built by FusionX students."
+/>
 
-      <p className="text-gray-400 mb-10">
-  Explore projects built by FusionX students.
-</p>
+<div className="my-10 grid grid-cols-1 gap-6 md:grid-cols-3">
+  <StatCard
+    title="Projects"
+    value={projects.length}
+    color="cyan"
+  />
 
-<div className="my-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+  <StatCard
+    title="Featured"
+    value={featuredProjects.length}
+    color="yellow"
+  />
 
-  <div className="rounded-xl bg-[#101827] p-6 text-center">
-    <h2 className="text-3xl font-bold text-cyan-400">
-      {projects.length}
-    </h2>
-    <p className="text-gray-400">Projects</p>
-  </div>
-
-  <div className="rounded-xl bg-[#101827] p-6 text-center">
-    <h2 className="text-3xl font-bold text-yellow-400">
-      {featuredProjects.length}
-    </h2>
-    <p className="text-gray-400">Featured</p>
-  </div>
-
-  <div className="rounded-xl bg-[#101827] p-6 text-center">
-    <h2 className="text-3xl font-bold text-green-400">
-      {new Set(projects.map((p) => p.category)).size}
-    </h2>
-    <p className="text-gray-400">Categories</p>
-  </div>
-
+  <StatCard
+    title="Categories"
+    value={new Set(projects.map((p) => p.category)).size}
+    color="green"
+  />
 </div>
 
       {loading ? (
   <p>Loading projects...</p>
 ) : (
   <>
-    <input
-  type="text"
+    <SearchInput
   value={search}
-  onChange={(e) => setSearch(e.target.value)}
+  onChange={setSearch}
   placeholder="🔍 Search Projects..."
-  className="mb-10 w-full rounded-xl border border-white/10 bg-[#101827] px-5 py-4 text-white placeholder:text-gray-500 focus:border-cyan-500 focus:outline-none"
 />
 
 <div className="mb-10 flex flex-wrap gap-3">
@@ -145,6 +140,7 @@ const categories = [
   </>
 )}
 
-    </div>
-  );
+        </Container>
+  </div>
+);
 }

@@ -1,3 +1,6 @@
+import Badge from "../ui/Badge";
+import StatusBadge from "../ui/StatusBadge";
+import Button from "../ui/Button";
 import { Link } from "react-router-dom";
 import {Users} from "lucide-react";
 import type { Project } from "../../lib/supabase";
@@ -33,23 +36,11 @@ export default function ProjectCard({ project }: Props) {
       <div className="p-5">
 
         <div className="flex items-center justify-between mb-4">
-  <span className="rounded-full bg-cyan-500/20 px-3 py-1 text-xs font-medium text-cyan-300">
-    {project.category}
-  </span>
+  <Badge>
+  {project.category}
+</Badge>
 
-  <span
-    className={`rounded-full px-3 py-1 text-xs font-medium ${
-      project.status === "Completed"
-        ? "bg-green-500/20 text-green-300"
-        : project.status === "Ongoing"
-        ? "bg-blue-500/20 text-blue-300"
-        : project.status === "Planning"
-        ? "bg-yellow-500/20 text-yellow-300"
-        : "bg-gray-500/20 text-gray-300"
-    }`}
-  >
-    {project.status}
-  </span>
+  <StatusBadge status={project.status} />
 </div>
 
         <h2 className="text-xl font-bold text-white">
@@ -77,11 +68,10 @@ export default function ProjectCard({ project }: Props) {
         </div>
 
         <div className="mt-6">
-  <Link
-  to={`/project/${project.slug}`}
-  className="block w-full rounded-xl bg-cyan-500 py-3 text-center font-semibold text-black transition hover:bg-cyan-400"
->
-  View Details →
+  <Link to={`/project/${project.slug}`}>
+  <Button fullWidth>
+    View Details →
+  </Button>
 </Link>
 </div>
 
