@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Lightbulb, Send, ThumbsUp, Clock, Tag, ChevronDown } from 'lucide-react';
+import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Lightbulb, Send, ThumbsUp,Handshake, Clock, Tag, ChevronDown } from 'lucide-react';
 import { supabase, type Idea } from '../lib/supabase';
 import {
   Container,
@@ -30,10 +32,12 @@ const initialForm: FormData = {
 
 export default function Ideas() {
   const [form, setForm] = useState<FormData>(initialForm);
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [ideas, setIdeas] = useState<Idea[]>([]);
+  const navigate = useNavigate();
   const [loadingIdeas, setLoadingIdeas] = useState(true);
   const [votingId, setVotingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(true);
@@ -341,6 +345,20 @@ export default function Ideas() {
                         <ThumbsUp size={13} className={votingId === idea.id ? 'animate-bounce' : ''} />
                         {idea.votes}
                       </button>
+
+                      <button
+  onClick={() =>
+    navigate(
+      `/contact?idea=${encodeURIComponent(idea.idea_title)}`
+    )
+  }
+  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 text-sm font-semibold hover:bg-cyan-500/20 transition-all duration-200"
+>
+  <>
+  <Handshake size={14} />
+  Collaborate
+</>
+</button>
                     </div>
                     <p className="text-gray-500 text-sm leading-relaxed mb-3 line-clamp-2">
   {idea.description}

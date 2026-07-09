@@ -1,9 +1,13 @@
-import { useState } from 'react';
-import { Mail, MapPin, Send, Github, Twitter, Linkedin, Instagram, MessageSquare, CheckCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Mail, MapPin, Send, Github, Instagram, MessageSquare, CheckCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import Container from "../components/ui/Container";
+import { useSearchParams } from "react-router-dom";
+import SectionHeading from "../components/ui/SectionHeading";
 
 type FormData = {
   name: string;
+  usn: string;
   email: string;
   phone: string;
   subject: string;
@@ -12,6 +16,7 @@ type FormData = {
 
 const initialForm: FormData = {
   name: '',
+  usn: '',
   email: '',
   phone: '',
   subject: '',
@@ -19,8 +24,6 @@ const initialForm: FormData = {
 };
 const socials = [
   { icon: Github, label: 'GitHub', handle: '@fusionhubtechlab', href: '#', color: 'hover:text-white hover:bg-white/10' },
-  { icon: Twitter, label: 'Twitter / X', handle: '@fusionhub', href: '#', color: 'hover:text-cyan-400 hover:bg-cyan-400/10' },
-  { icon: Linkedin, label: 'LinkedIn', handle: 'FusionX', href: '#', color: 'hover:text-blue-400 hover:bg-blue-400/10' },
   { icon: Instagram, label: 'Instagram', handle: '@fusionhubtechlab', href: '#', color: 'hover:text-pink-400 hover:bg-pink-400/10' },
 ];
 
@@ -33,6 +36,27 @@ const faqs = [
 
 export default function Contact() {
   const [form, setForm] = useState<FormData>(initialForm);
+  const [searchParams] = useSearchParams();
+  const selectedIdea = searchParams.get("idea");
+  useEffect(() => {
+  const idea = searchParams.get("idea");
+
+  if (idea) {
+    setForm((prev) => ({
+      ...prev,
+      subject: "Collaboration Request",
+      message: `Hi FusionX Team,
+
+I would like to collaborate on the following idea:
+
+${idea}
+
+My skills are:
+
+`,
+    }));
+  }
+}, [searchParams]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -56,13 +80,13 @@ export default function Contact() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050a14] text-white pt-16">
+    <div className="min-h-screen bg-[#08111f] text-white pt-28">
       {/* Header */}
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-blue-600/8 rounded-full blur-3xl" />
         </div>
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Container className="relative max-w-4xl text-center">
           <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4 block">Get In Touch</span>
           <h1 className="text-5xl sm:text-6xl font-black mb-6">
             Let's{' '}
@@ -71,10 +95,10 @@ export default function Contact() {
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             Have a question, want to join, or just want to say hi? We'd love to hear from you. Our team typically responds within 24 hours.
           </p>
-        </div>
+        </Container>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+      <Container className="pb-24">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Left: Info */}
           <div className="space-y-8">
@@ -155,7 +179,24 @@ export default function Contact() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+  <>
+    {selectedIdea && (
+      <div className="mb-6 rounded-2xl border border-cyan-500/30 bg-cyan-500/10 p-5">
+        <h3 className="text-lg font-semibold text-cyan-300">
+          🤝 Collaboration Request
+        </h3>
+
+        <p className="mt-2 text-gray-300">
+          You're requesting to collaborate on:
+        </p>
+
+        <p className="mt-2 font-bold text-white">
+          {selectedIdea}
+        </p>
+      </div>
+    )}
+
+    <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label className="block text-gray-400 text-sm font-medium mb-2">Your Name *</label>
                     <input
@@ -168,6 +209,21 @@ export default function Contact() {
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/8 transition-all duration-200 text-sm"
                     />
                   </div>
+                  <div>
+  <label className="block text-gray-400 text-sm font-medium mb-2">
+    USN *
+  </label>
+
+  <input
+    type="text"
+    name="usn"
+    required
+    value={form.usn}
+    onChange={handleChange}
+    placeholder="1NM23CS001"
+    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/8 transition-all duration-200 text-sm"
+  />
+</div>
                   <div>
                     <label className="block text-gray-400 text-sm font-medium mb-2">Email Address *</label>
                     <input
@@ -204,6 +260,7 @@ export default function Contact() {
                     required
                     value={form.subject}
                     onChange={handleChange}
+                    readOnly={searchParams.has("idea")}
                     placeholder="Want to Join FusionX"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-blue-500/50 focus:bg-white/8 transition-all duration-200 text-sm"
                     />
@@ -243,7 +300,8 @@ export default function Contact() {
                     )}
                   </button>
                 </form>
-              )}
+</>
+)}
             </div>
 
             {/* FAQs */}
@@ -260,7 +318,7 @@ export default function Contact() {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 }
