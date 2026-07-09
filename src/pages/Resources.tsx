@@ -1,4 +1,6 @@
 import { ExternalLink, BookOpen, Code2, Brain, Smartphone, Database, Cloud, Shield, Layers } from 'lucide-react';
+import Container from "../components/ui/Container";
+import SectionHeading from "../components/ui/SectionHeading";
 
 type Resource = {
   title: string;
@@ -103,13 +105,13 @@ const typeColors: Record<Resource['type'], string> = {
 
 export default function Resources() {
   return (
-    <div className="min-h-screen bg-[#050a14] text-white pt-16">
+    <div className="min-h-screen bg-[#08111f] text-white pt-28">
       {/* Header */}
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-blue-600/8 rounded-full blur-3xl" />
         </div>
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Container className="relative max-w-4xl text-center">
           <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4 block">Learning Hub</span>
           <h1 className="text-5xl sm:text-6xl font-black mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Resources</span>
@@ -118,16 +120,16 @@ export default function Resources() {
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
             Curated learning materials, roadmaps, and tools handpicked by our senior members. Everything you need to go from zero to builder.
           </p>
-        </div>
+        </Container>
       </section>
 
       {/* Quick Resources */}
       <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-1 h-8 rounded-full bg-gradient-to-b from-yellow-500 to-orange-500" />
-            <h2 className="text-3xl font-black">Must-Have Resources</h2>
-          </div>
+        <Container>
+          <SectionHeading
+  title="Must-Have Resources"
+  subtitle="Curated learning materials for every FusionX member."
+/>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {generalResources.map((r) => (
               <a
@@ -153,16 +155,16 @@ export default function Resources() {
               </a>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Roadmaps */}
       <section className="py-16 pb-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-10">
-            <div className="w-1 h-8 rounded-full bg-gradient-to-b from-blue-500 to-cyan-500" />
-            <h2 className="text-3xl font-black">Learning Roadmaps</h2>
-          </div>
+        <Container>
+          <SectionHeading
+  title="Learning Roadmaps"
+  subtitle="Follow these paths to master your chosen domain."
+/>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {roadmaps.map((rm) => {
               const Icon = rm.icon;
@@ -205,7 +207,7 @@ export default function Resources() {
               );
             })}
           </div>
-        </div>
+        </Container>
       </section>
     </div>
   );

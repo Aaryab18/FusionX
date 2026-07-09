@@ -1,4 +1,6 @@
 import { Lightbulb, Users, Code2, Rocket, Globe, Target, Eye, Heart } from 'lucide-react';
+import Container from "../components/ui/Container";
+import SectionHeading from "../components/ui/SectionHeading";
 
 const values = [
   {
@@ -62,13 +64,13 @@ const workflow = [
 
 export default function About() {
   return (
-    <div className="min-h-screen bg-[#050a14] text-white pt-16">
+    <div className="min-h-screen bg-[#08111f] text-white pt-28">
       {/* Hero */}
       <section className="relative py-28 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-600/8 rounded-full blur-3xl" />
         </div>
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <Container className="relative max-w-4xl text-center">
           <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4 block">About Us</span>
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-tight">
             Not a club.
@@ -80,12 +82,12 @@ export default function About() {
           <p className="text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed">
             FusionX is where innovation and execution collide to create solutions that change the world.
           </p>
-        </div>
+        </Container>
       </section>
 
       {/* Who We Are */}
       <section className="py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Container>
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4 block">Who We Are</span>
@@ -132,17 +134,17 @@ export default function About() {
               </div>
             </div>
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Values */}
       <section className="py-20 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-950/5 to-transparent pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4 block">Our Values</span>
-            <h2 className="text-4xl font-black">What drives us</h2>
-          </div>
+        <Container>
+          <SectionHeading
+  title="Our Values"
+  subtitle="The principles that shape every project, collaboration, and decision at FusionX."
+/>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v) => {
               const Icon = v.icon;
@@ -160,19 +162,16 @@ export default function About() {
               );
             })}
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Workflow */}
       <section className="py-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest mb-4 block">How It Works</span>
-            <h2 className="text-4xl font-black">
-              From idea to{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">impact</span>
-            </h2>
-          </div>
+        <Container>
+          <SectionHeading
+  title="How It Works"
+  subtitle="From an idea to a real-world impact—this is how FusionX turns concepts into products."
+/>
           <div className="relative">
             {/* Connecting line */}
             <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
@@ -194,7 +193,7 @@ export default function About() {
               })}
             </div>
           </div>
-        </div>
+        </Container>
       </section>
     </div>
   );
