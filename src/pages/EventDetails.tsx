@@ -1,12 +1,42 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
-import { events } from "../data/events";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+import { mapDatabaseEvent } from "../types/databaseEvent";
+import type { Event } from "../types/event";
 
 export default function EventDetails() {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  const event = events.find((e) => e.slug === slug);
+const [event, setEvent] = useState<Event | null>(null);
+const [loading, setLoading] = useState(true);
+useEffect(() => {
+  loadEvent();
+}, [slug]);
+
+async function loadEvent() {
+  setLoading(true);
+
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .eq("slug", slug)
+    .single();
+
+  if (!error && data) {
+    setEvent(mapDatabaseEvent(data));
+  }
+
+  setLoading(false);
+}
+if (loading) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#08111f] text-white">
+      Loading event...
+    </div>
+  );
+}
   const now = new Date();
 
 const regOpen = new Date(event?.registrationOpen ?? "");

@@ -7,11 +7,12 @@ import {
   Trophy,
   Code2,
 } from "lucide-react";
-import { useState } from "react";
 import type { Event } from "../types/event";
 import { Link, useNavigate } from "react-router-dom";
 import EmptyState from "../components/ui/EmptyState";
-import { events } from "../data/events";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabase";
+import { mapDatabaseEvent } from "../types/databaseEvent";
 import {
   Container,
   SectionHeading,
@@ -41,7 +42,8 @@ const registrationState =
   const isUpcoming = event.status == 'upcoming';
 
   return (
-    <div className={`group relative bg-white/3 border rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-950/50 ${
+    <div
+  className={`group relative h-full flex flex-col bg-white/3 border rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-950/50 ${
       isUpcoming ? 'border-blue-500/20 hover:border-blue-400/40' : 'border-white/8 hover:border-white/15'
     }`}>
       {isUpcoming && (
@@ -53,7 +55,7 @@ const registrationState =
         </div>
       )}
 
-      <div className="p-6">
+      <div className="p-6 flex flex-col flex-1">
         <div className="flex items-start gap-4 mb-4">
           <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${event.color} flex items-center justify-center flex-shrink-0`}>
             <Icon size={22} className="text-white" />
@@ -110,7 +112,7 @@ const registrationState =
           </div>
         </div>
 
-        <div className="flex gap-3">
+        <div className="mt-auto pt-5 flex gap-3">
   <Link
     to={`/events/${event.slug}`}
     className="flex-1 flex items-center justify-center rounded-xl border border-cyan-500 py-3 text-sm font-semibold text-cyan-400 transition hover:bg-cyan-500 hover:text-black"
@@ -123,7 +125,7 @@ const registrationState =
     disabled
     className="flex-1 rounded-xl bg-white/10 py-3 text-sm font-semibold text-gray-400 cursor-not-allowed"
   >
-    Registration Opens Soon
+    Opens Soon
   </button>
 )}
 
@@ -155,10 +157,30 @@ const registrationState =
 export default function Events() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [events, setEvents] = useState<Event[]>([]);
+  const [loading, setLoading] = useState(true);
 
 const upcoming = events.filter(
   (e) => e.status === "upcoming"
 );
+useEffect(() => {
+  loadEvents();
+}, []);
+
+async function loadEvents() {
+  setLoading(true);
+
+  const { data, error } = await supabase
+    .from("events")
+    .select("*")
+    .order("created_at", { ascending: true });
+
+  if (!error && data) {
+    setEvents(data.map(mapDatabaseEvent));
+  }
+
+  setLoading(false);
+}
 
 const featuredEvent =
   upcoming.find((e) => e.featured) || upcoming[0];
@@ -186,9 +208,16 @@ const filteredEvents = upcoming.filter((event) =>
   event.title.toLowerCase().includes(search.toLowerCase()) ||
   event.type.toLowerCase().includes(search.toLowerCase())
 );
-
+if (loading) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#050a14] text-white">
+      Loading events...
+    </div>
+  );
+}
 
   return (
+    
     <div className="min-h-screen bg-[#050a14] text-white pt-16">
       {/* Header */}
       <section className="relative py-24 overflow-hidden">
@@ -347,7 +376,7 @@ const filteredEvents = upcoming.filter((event) =>
     description="We'll announce exciting FusionX events very soon."
   />
 ) : (
-  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
     {filteredEvents.map((e) => (
       <EventCard key={e.id} event={e} />
     ))}
