@@ -7,6 +7,18 @@ export default function EventDetails() {
   const navigate = useNavigate();
 
   const event = events.find((e) => e.slug === slug);
+  const now = new Date();
+
+const regOpen = new Date(event?.registrationOpen ?? "");
+
+const regClose = new Date(event?.registrationClose ?? "");
+
+const registrationState =
+  now < regOpen
+    ? "upcoming"
+    : now > regClose
+    ? "closed"
+    : "open";
 
   if (!event) {
     return (
@@ -95,11 +107,34 @@ export default function EventDetails() {
           Registration
         </h2>
 
-        <button
-          className="mt-6 rounded-xl bg-cyan-500 px-8 py-4 font-semibold text-black hover:bg-cyan-400 transition"
-        >
-          Register Now
-        </button>
+        {registrationState === "upcoming" && (
+  <button
+    disabled
+    className="mt-6 w-full rounded-xl bg-white/10 px-8 py-4 font-semibold text-gray-400 cursor-not-allowed"
+  >
+    Registration Opens Soon
+  </button>
+)}
+
+{registrationState === "open" && (
+  <button
+    onClick={() =>
+      navigate(`/contact?event=${encodeURIComponent(event.title)}`)
+    }
+    className="mt-6 w-full rounded-xl bg-cyan-500 px-8 py-4 font-semibold text-black hover:bg-cyan-400 transition"
+  >
+    Register Now
+  </button>
+)}
+
+{registrationState === "closed" && (
+  <button
+    disabled
+    className="mt-6 w-full rounded-xl bg-red-500/20 px-8 py-4 font-semibold text-red-300 cursor-not-allowed"
+  >
+    Registrations Closed
+  </button>
+)}
 
       </div>
     </div>

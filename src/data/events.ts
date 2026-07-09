@@ -17,6 +17,8 @@ export const events: Event[] = [
     status: "upcoming",
     icon: Users,
     color: "from-cyan-500 to-blue-500",
+    registrationOpen: "2026-07-09T09:00:00",
+registrationClose: "2026-12-20T23:59:00",
   },
 
   {
@@ -34,7 +36,8 @@ export const events: Event[] = [
     status: "upcoming",
     icon: Code2,
     color: "from-blue-500 to-cyan-500",
-    speakers: ["FusionX Core Team"],
+    registrationOpen: "2026-11-15T09:00:00",
+registrationClose: "2026-12-20T23:59:00",
   },
 
   {
@@ -52,6 +55,8 @@ export const events: Event[] = [
     status: "upcoming",
     icon: Trophy,
     color: "from-yellow-500 to-orange-500",
+    registrationOpen: "2026-11-15T09:00:00",
+registrationClose: "2026-12-20T23:59:00",
   },
 
   {
@@ -70,6 +75,8 @@ export const events: Event[] = [
     icon: Trophy,
     color: "from-orange-500 to-red-500",
     prizes: "Certificates & Exciting Rewards",
+    registrationOpen: "2026-11-15T09:00:00",
+registrationClose: "2026-12-20T23:59:00",
     featured: true,
   },
 ];

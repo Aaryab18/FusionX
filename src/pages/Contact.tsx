@@ -3,8 +3,6 @@ import { Mail, MapPin, Send, Github, Instagram, MessageSquare, CheckCircle } fro
 import { supabase } from '../lib/supabase';
 import Container from "../components/ui/Container";
 import { useSearchParams } from "react-router-dom";
-import SectionHeading from "../components/ui/SectionHeading";
-
 type FormData = {
   name: string;
   usn: string;
@@ -40,22 +38,39 @@ export default function Contact() {
   const selectedIdea = searchParams.get("idea");
   useEffect(() => {
   const idea = searchParams.get("idea");
+  const event = searchParams.get("event");
 
   if (idea) {
-    setForm((prev) => ({
-      ...prev,
-      subject: "Collaboration Request",
-      message: `Hi FusionX Team,
+  setForm((prev) => ({
+    ...prev,
+    subject: "Idea Collaboration",
+    message: `Hi FusionX Team,
 
-I would like to collaborate on the following idea:
+I would like to collaborate on the idea:
 
 ${idea}
 
-My skills are:
+Looking forward to working with the team.
 
-`,
-    }));
-  }
+Thank you.`,
+  }));
+}
+
+if (event) {
+  setForm((prev) => ({
+    ...prev,
+    subject: "Event Registration",
+    message: `Hi FusionX Team,
+
+I would like to register for:
+
+${event}
+
+Looking forward to participating.
+
+Thank you.`,
+  }));
+}
 }, [searchParams]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);

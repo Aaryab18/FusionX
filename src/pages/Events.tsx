@@ -8,6 +8,7 @@ import {
   Code2,
 } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Event } from "../types/event";
 import { Link } from "react-router-dom";
 import { events } from "../data/events";
@@ -21,6 +22,20 @@ import {
 
 
 function EventCard({ event }: { event: Event }) {
+  const navigate = useNavigate();
+
+const now = new Date();
+
+const regOpen = new Date(event.registrationOpen);
+
+const regClose = new Date(event.registrationClose);
+
+const registrationState =
+  now < regOpen
+    ? "upcoming"
+    : now > regClose
+    ? "closed"
+    : "open";
   const Icon = event.icon;
   const fillPercent = Math.min((event.attendees / event.maxAttendees) * 100, 100);
   const isUpcoming = event.status === 'upcoming';
@@ -103,12 +118,34 @@ function EventCard({ event }: { event: Event }) {
     View Details
   </Link>
 
-  {isUpcoming && (
-    <button className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600/20 to-cyan-500/20 border border-blue-500/30 py-3 text-sm font-semibold text-blue-300 transition-all duration-200 hover:from-blue-600/30 hover:to-cyan-500/30 hover:text-white">
-      Register
-      <ArrowRight size={15} />
-    </button>
-  )}
+  {registrationState === "upcoming" && (
+  <button
+    disabled
+    className="flex-1 rounded-xl bg-white/10 py-3 text-sm font-semibold text-gray-400 cursor-not-allowed"
+  >
+    Registration Opens Soon
+  </button>
+)}
+
+{registrationState === "open" && (
+  <button
+    onClick={() =>
+      navigate(`/contact?event=${encodeURIComponent(event.title)}`)
+    }
+    className="flex-1 rounded-xl bg-cyan-500 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition"
+  >
+    Register Now
+  </button>
+)}
+
+{registrationState === "closed" && (
+  <button
+    disabled
+    className="flex-1 rounded-xl bg-red-500/20 py-3 text-sm font-semibold text-red-300 cursor-not-allowed"
+  >
+    Registrations Closed
+  </button>
+)}
 </div>
       </div>
     </div>
@@ -129,6 +166,7 @@ const filteredEvents = upcoming.filter((event) =>
   event.title.toLowerCase().includes(search.toLowerCase()) ||
   event.type.toLowerCase().includes(search.toLowerCase())
 );
+
 
   return (
     <div className="min-h-screen bg-[#050a14] text-white pt-16">

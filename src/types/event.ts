@@ -24,4 +24,8 @@ export type Event = {
   featured?: boolean;
   speakers?: string[];
   prizes?: string;
+
+registrationOpen: string;
+registrationClose: string;
+registrationLink?: string;
 };
