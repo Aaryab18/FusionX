@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Zap, Github, Twitter, Linkedin, Instagram, Mail } from 'lucide-react';
+import { Zap, Instagram, Mail } from 'lucide-react';
 
 const quickLinks = [
   { label: 'Home', path: '/' },
@@ -13,9 +13,6 @@ const quickLinks = [
 ];
 
 const socials = [
-  { icon: Github, href: '#', label: 'GitHub' },
-  { icon: Twitter, href: '#', label: 'Twitter' },
-  { icon: Linkedin, href: '#', label: 'LinkedIn' },
   { icon: Instagram, href: '#', label: 'Instagram' },
   { icon: Mail, href: 'mailto:fusionhub@college.edu', label: 'Email' },
 ];
