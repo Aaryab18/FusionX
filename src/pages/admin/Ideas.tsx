@@ -159,14 +159,15 @@ export default function Ideas() {
                 </td>
               </tr>
             ) : filtered.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={7}
-                  className="text-center py-8 text-gray-400"
-                >
-                  No ideas found.
-                </td>
-              </tr>
+     <tr>
+  <td
+    colSpan={8}
+    className="py-16 text-center text-gray-400"
+  >
+    No ideas found.
+  </td>
+</tr>
+              
             ) : (
               filtered.map((idea) => (
                 <tr

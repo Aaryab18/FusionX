@@ -8,9 +8,9 @@ import {
   Code2,
 } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import type { Event } from "../types/event";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import EmptyState from "../components/ui/EmptyState";
 import { events } from "../data/events";
 import {
   Container,
@@ -22,7 +22,7 @@ import {
 
 
 function EventCard({ event }: { event: Event }) {
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
 const now = new Date();
 
@@ -38,7 +38,7 @@ const registrationState =
     : "open";
   const Icon = event.icon;
   const fillPercent = Math.min((event.attendees / event.maxAttendees) * 100, 100);
-  const isUpcoming = event.status === 'upcoming';
+  const isUpcoming = event.status == 'upcoming';
 
   return (
     <div className={`group relative bg-white/3 border rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-950/50 ${
@@ -153,6 +153,7 @@ const registrationState =
 }
 
 export default function Events() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
 const upcoming = events.filter(
@@ -161,6 +162,25 @@ const upcoming = events.filter(
 
 const featuredEvent =
   upcoming.find((e) => e.featured) || upcoming[0];
+
+  const now = new Date();
+
+const featuredRegOpen = featuredEvent
+  ? new Date(featuredEvent.registrationOpen)
+  : null;
+
+const featuredRegClose = featuredEvent
+  ? new Date(featuredEvent.registrationClose)
+  : null;
+
+const featuredRegistrationState =
+  !featuredEvent
+    ? "closed"
+    : now < featuredRegOpen!
+    ? "upcoming"
+    : now > featuredRegClose!
+    ? "closed"
+    : "open";
 
 const filteredEvents = upcoming.filter((event) =>
   event.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -266,10 +286,36 @@ const filteredEvents = upcoming.filter((event) =>
 
             </div>
 
-            <button className="mt-8 w-fit rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-black hover:bg-cyan-400 transition">
-              Register Now
-            </button>
+            {featuredRegistrationState === "upcoming" && (
+  <button
+    disabled
+    className="mt-8 w-fit rounded-xl bg-white/10 px-6 py-3 font-semibold text-gray-400 cursor-not-allowed"
+  >
+    Opens Soon
+  </button>
+)}
 
+{featuredRegistrationState === "open" && (
+  <button
+    onClick={() =>
+      navigate(
+        `/contact?event=${encodeURIComponent(featuredEvent.title)}`
+      )
+    }
+    className="mt-8 w-fit rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-black hover:bg-cyan-400 transition"
+  >
+    Register Now
+  </button>
+)}
+
+{featuredRegistrationState === "closed" && (
+  <button
+    disabled
+    className="mt-8 w-fit rounded-xl bg-red-500/20 px-6 py-3 font-semibold text-red-300 cursor-not-allowed"
+  >
+    Registrations Closed
+  </button>
+)}
           </div>
 
         </div>
@@ -295,9 +341,18 @@ const filteredEvents = upcoming.filter((event) =>
     placeholder="🔍 Search Events..."
   />
 </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredEvents.map((e) => <EventCard key={e.id} event={e} />)}
-          </div>
+          {filteredEvents.length === 0 ? (
+  <EmptyState
+    title="No Events Available"
+    description="We'll announce exciting FusionX events very soon."
+  />
+) : (
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {filteredEvents.map((e) => (
+      <EventCard key={e.id} event={e} />
+    ))}
+  </div>
+)}
         </Container>
       </section>
       

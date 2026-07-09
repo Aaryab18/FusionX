@@ -76,7 +76,7 @@ registrationClose: "2026-12-20T23:59:00",
     color: "from-orange-500 to-red-500",
     prizes: "Certificates & Exciting Rewards",
     registrationOpen: "2026-11-15T09:00:00",
-registrationClose: "2026-12-20T23:59:00",
+    registrationClose: "2026-12-20T23:59:00",
     featured: true,
   },
 ];
