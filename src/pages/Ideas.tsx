@@ -51,7 +51,7 @@ export default function Ideas() {
     const { data } = await supabase
   .from("ideas")
   .select("*")
-  .eq("status", "Idea")
+  .eq("status", "Approved")
   .order("votes", { ascending: false })
   .order("created_at", { ascending: false });
     if (data) setIdeas(data as Idea[]);
@@ -78,7 +78,7 @@ export default function Ideas() {
       description: form.description,
       skills_required: form.skills_required,
       team: "Seeking Team",
-      status: "Idea",
+      status: "Pending",
       votes: 0,
     },
   ])
@@ -115,10 +115,14 @@ export default function Ideas() {
 
   setVotingId(idea.id);
 
-  const { error: err } = await supabase
-    .from("ideas")
-    .update({ votes: idea.votes + 1 })
-    .eq("id", idea.id);
+  const { data, error: err } = await supabase
+  .from("ideas")
+  .update({ votes: idea.votes + 1 })
+  .eq("id", idea.id)
+  .select();
+
+console.log("Vote update:", data);
+console.log("Vote error:", err);
 
   if (!err) {
     // Save this vote in browser
@@ -280,7 +284,7 @@ export default function Ideas() {
                 {success && (
                   <div className="bg-green-500/10 border border-green-500/20 rounded-xl px-4 py-3 text-green-400 text-sm flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                    Idea submitted! The community will see it shortly.
+                    Idea submitted successfully! It will be reviewed by the FusionX team before appearing publicly.
                   </div>
                 )}
 

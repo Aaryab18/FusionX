@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 
@@ -6,12 +6,14 @@ type Props = {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  idea?: any;
 };
 
 export default function IdeaFormModal({
   open,
   onClose,
   onSuccess,
+  idea,
 }: Props) {
   const [loading, setLoading] = useState(false);
 
@@ -23,9 +25,24 @@ export default function IdeaFormModal({
     idea_title: "",
     description: "",
     skills_required: "",
-    status: "Idea",
+    status: "Pending",
     votes: 0,
   });
+  useEffect(() => {
+  if (idea) {
+    setForm({
+  name: idea.name,
+  usn: idea.usn,
+  team: idea.team,
+  year: idea.year ?? "",
+  idea_title: idea.idea_title,
+  description: idea.description,
+  skills_required: idea.skills_required,
+  status: idea.status,
+  votes: idea.votes,
+});
+  }
+}, [idea]);
 
   function handleChange(
     e: React.ChangeEvent<
@@ -41,54 +58,63 @@ export default function IdeaFormModal({
     });
   }
 
-  async function handleSubmit(
-    e: React.FormEvent<HTMLFormElement>
-  ) {
-    e.preventDefault();
+  async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
 
-    setLoading(true);
+  let error;
 
-    const { error } = await supabase
+  if (idea) {
+    ({ error } = await supabase
       .from("ideas")
-      .insert([
-        {
-          name: form.name,
-          usn: form.usn,
-          team: form.team,
-          year: form.year,
-          idea_title: form.idea_title,
-          description: form.description,
-          skills_required: form.skills_required,
-          status: form.status,
-          votes: form.votes,
-        },
-      ]);
-
-    setLoading(false);
-
-    if (error) {
-      alert(error.message);
-      return;
-    }
-
-    alert("Idea added successfully!");
-
-    setForm({
-      name: "",
-      usn: "",
-      team: "",
-      year: "",
-      idea_title: "",
-      description: "",
-      skills_required: "",
-      status: "Idea",
-      votes: 0,
-    });
-
-    onSuccess();
-    onClose();
+      .update({
+  name: form.name,
+  usn: form.usn,
+  team: form.team,
+  year: form.year,
+  idea_title: form.idea_title,
+  description: form.description,
+  skills_required: form.skills_required,
+  status: form.status,
+  votes: form.votes,
+})
+      .eq("id", idea.id));
+  } else {
+    ({ error } = await supabase
+      .from("ideas")
+      .insert({
+  name: form.name,
+  usn: form.usn,
+  team: form.team,
+  year: form.year,
+  idea_title: form.idea_title,
+  description: form.description,
+  skills_required: form.skills_required,
+  status: "Pending",
+  votes: 0,
+}));
   }
 
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  onSuccess();
+
+  setForm({
+  name: "",
+  usn: "",
+  team: "",
+  year: "",
+  idea_title: "",
+  description: "",
+  skills_required: "",
+  status: "Idea",
+  votes: 0,
+});
+
+  onClose();
+}
   if (!open) return null;
 
   return (
@@ -99,7 +125,7 @@ export default function IdeaFormModal({
         <div className="flex items-center justify-between border-b border-white/10 p-6">
 
           <h2 className="text-2xl font-bold text-white">
-            Add New Idea
+            {idea ? "Edit Idea" : "Add New Idea"}
           </h2>
 
           <button
@@ -181,22 +207,6 @@ export default function IdeaFormModal({
               </select>
             </div>
 
-            <div>
-              <label className="block mb-2 text-sm text-gray-300">
-                Status
-              </label>
-
-              <select
-                name="status"
-                value={form.status}
-                onChange={handleChange}
-                className="w-full rounded-lg bg-[#111827] border border-white/10 px-4 py-3 text-white"
-              >
-                <option>Idea</option>
-                <option>Ongoing</option>
-                <option>Completed</option>
-              </select>
-            </div>
                       </div>
 
           <div>
@@ -243,20 +253,6 @@ export default function IdeaFormModal({
             />
           </div>
 
-          <div>
-            <label className="block mb-2 text-sm text-gray-300">
-              Initial Votes
-            </label>
-
-            <input
-              type="number"
-              min={0}
-              name="votes"
-              value={form.votes}
-              onChange={handleChange}
-              className="w-full rounded-lg bg-[#111827] border border-white/10 px-4 py-3 text-white"
-            />
-          </div>
 
           <div className="flex justify-end gap-3 pt-2">
 

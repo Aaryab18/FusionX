@@ -1,13 +1,16 @@
 import IdeaFormModal from "../../components/admin/IdeaFormModal";
+import IdeaViewModal from "../../components/admin/IdeaViewModal";
 import { useEffect, useState } from "react";
 import { supabase, Idea } from "../../lib/supabase";
-import { Search, Trash2, Play, Check } from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
 
 export default function Ideas() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const [viewOpen, setViewOpen] = useState(false);
+const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
 
   useEffect(() => {
     fetchIdeas();
@@ -55,9 +58,9 @@ export default function Ideas() {
   }
 
   async function updateStatus(
-    id: string,
-    status: "Idea" | "Ongoing" | "Completed"
-  ) {
+  id: string,
+  status: string
+) {
     const { error } = await supabase
       .from("ideas")
       .update({ status })
@@ -96,12 +99,6 @@ export default function Ideas() {
     </p>
   </div>
 
-  <button
-    onClick={() => setOpenModal(true)}
-    className="px-5 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white font-semibold"
-  >
-    + Add New Idea
-  </button>
 
 </div>
 
@@ -202,11 +199,11 @@ export default function Ideas() {
                   <td className="px-5 py-4">
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        idea.status === "Completed"
-                          ? "bg-green-500/20 text-green-400"
-                          : idea.status === "Ongoing"
-                          ? "bg-blue-500/20 text-blue-400"
-                          : "bg-yellow-500/20 text-yellow-400"
+                        idea.status === "Approved"
+  ? "bg-green-500/20 text-green-300"
+  : idea.status === "Rejected"
+  ? "bg-red-500/20 text-red-300"
+  : "bg-yellow-500/20 text-yellow-300"
                       }`}
                     >
                       {idea.status}
@@ -216,42 +213,37 @@ export default function Ideas() {
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-2">
 
-                      {idea.status === "Idea" && (
-                        <button
-                          onClick={() =>
-                            updateStatus(
-                              idea.id,
-                              "Ongoing"
-                            )
-                          }
-                          className="p-2 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 transition"
-                          title="Move to Ongoing"
-                        >
-                          <Play
-                            size={18}
-                            className="text-blue-400"
-                          />
-                        </button>
-                      )}
+                      <button
+  onClick={() => {
+    setSelectedIdea(idea);
+    setViewOpen(true);
+  }}
+  className="p-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 transition"
+  title="View"
+>
+  👁
+</button>
 
-                      {idea.status !== "Completed" && (
-                        <button
-                          onClick={() =>
-                            updateStatus(
-                              idea.id,
-                              "Completed"
-                            )
-                          }
-                          className="p-2 rounded-lg bg-green-500/20 hover:bg-green-500/30 transition"
-                          title="Mark Completed"
-                        >
-                          <Check
-                            size={18}
-                            className="text-green-400"
-                          />
-                        </button>
-                      )}
+<button
+  onClick={() => {
+    setSelectedIdea(idea);
+    setOpenModal(true);
+  }}
+  className="p-2 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 transition"
+  title="Edit"
+>
+  ✏️
+</button>
 
+<select
+  value={idea.status}
+  onChange={(e) => updateStatus(idea.id, e.target.value)}
+  className="rounded-lg bg-[#111827] border border-white/10 px-3 py-2 text-sm text-white"
+>
+  <option value="Pending">Pending</option>
+  <option value="Approved">Approved</option>
+  <option value="Rejected">Rejected</option>
+</select>
                       <button
                         onClick={() =>
                           deleteIdea(idea.id)
@@ -275,8 +267,20 @@ export default function Ideas() {
       </div>
     <IdeaFormModal
   open={openModal}
-  onClose={() => setOpenModal(false)}
+  idea={selectedIdea}
+  onClose={() => {
+    setOpenModal(false);
+    setSelectedIdea(null);
+  }}
   onSuccess={fetchIdeas}
+/>
+<IdeaViewModal
+  open={viewOpen}
+  idea={selectedIdea}
+  onClose={() => {
+    setViewOpen(false);
+    setSelectedIdea(null);
+  }}
 />
 
 </div>
