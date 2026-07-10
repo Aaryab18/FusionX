@@ -7,13 +7,17 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const [stats, setStats] = useState({
   ideas: 0,
+  pendingIdeas: 0,
+  approvedIdeas: 0,
   projects: 0,
+  featuredProjects: 0,
   messages: 0,
   events: 0,
 });
 
 const [loading, setLoading] = useState(true);
 const [recentIdeas, setRecentIdeas] = useState<any[]>([]);
+const [recentMessages, setRecentMessages] = useState<any[]>([]);
 
 useEffect(() => {
   loadDashboardStats();
@@ -23,21 +27,48 @@ async function loadDashboardStats() {
   setLoading(true);
 
   const [
-    ideasResult,
-    projectsResult,
-    messagesResult,
-  ] = await Promise.all([
-    supabase.from("ideas").select("*", { count: "exact", head: true }),
-    supabase.from("projects").select("*", { count: "exact", head: true }),
-    supabase.from("contact_messages").select("*", { count: "exact", head: true }),
-  ]);
+  ideasResult,
+  pendingIdeasResult,
+  approvedIdeasResult,
+  projectsResult,
+  featuredProjectsResult,
+  messagesResult,
+] = await Promise.all([
+  supabase.from("ideas").select("*", { count: "exact", head: true }),
+
+  supabase
+    .from("ideas")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "Pending"),
+
+  supabase
+    .from("ideas")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "Approved"),
+
+  supabase
+    .from("projects")
+    .select("*", { count: "exact", head: true }),
+
+  supabase
+    .from("projects")
+    .select("*", { count: "exact", head: true })
+    .eq("featured", true),
+
+  supabase
+    .from("contact_messages")
+    .select("*", { count: "exact", head: true }),
+]);
 
   setStats({
-    ideas: ideasResult.count ?? 0,
-    projects: projectsResult.count ?? 0,
-    messages: messagesResult.count ?? 0,
-    events: events.length,
-  });
+  ideas: ideasResult.count ?? 0,
+  pendingIdeas: pendingIdeasResult.count ?? 0,
+  approvedIdeas: approvedIdeasResult.count ?? 0,
+  projects: projectsResult.count ?? 0,
+  featuredProjects: featuredProjectsResult.count ?? 0,
+  messages: messagesResult.count ?? 0,
+  events: events.length,
+});
   const { data } = await supabase
   .from("ideas")
   .select("*")
@@ -45,6 +76,14 @@ async function loadDashboardStats() {
   .limit(5);
 
 setRecentIdeas(data ?? []);
+
+const { data: messages } = await supabase
+  .from("contact_messages")
+  .select("*")
+  .order("created_at", { ascending: false })
+  .limit(5);
+
+setRecentMessages(messages ?? []);
 
   setLoading(false);
 }
@@ -64,27 +103,56 @@ setRecentIdeas(data ?? []);
     </div>
 
     {/* Stats */}
-    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-7">
 
       <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
-        <p className="text-gray-400 text-sm">Ideas</p>
-        <h2 className="mt-2 text-4xl font-bold text-cyan-400">{loading ? "..." : stats.ideas}</h2>
-      </div>
+  <p className="text-gray-400 text-sm">Ideas</p>
+  <h2 className="mt-2 text-4xl font-bold text-cyan-400">
+    {loading ? "..." : stats.ideas}
+  </h2>
+</div>
 
-      <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
-        <p className="text-gray-400 text-sm">Projects</p>
-        <h2 className="mt-2 text-4xl font-bold text-cyan-400">{loading ? "..." : stats.projects}</h2>
-      </div>
+<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+  <p className="text-gray-400 text-sm">Pending</p>
+  <h2 className="mt-2 text-4xl font-bold text-yellow-400">
+    {loading ? "..." : stats.pendingIdeas}
+  </h2>
+</div>
 
-      <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
-        <p className="text-gray-400 text-sm">Events</p>
-        <h2 className="mt-2 text-4xl font-bold text-cyan-400">{loading ? "..." : stats.events}</h2>
-      </div>
+<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+  <p className="text-gray-400 text-sm">Approved</p>
+  <h2 className="mt-2 text-4xl font-bold text-green-400">
+    {loading ? "..." : stats.approvedIdeas}
+  </h2>
+</div>
 
-      <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
-        <p className="text-gray-400 text-sm">Messages</p>
-        <h2 className="mt-2 text-4xl font-bold text-cyan-400">{loading ? "..." : stats.messages}</h2>
-      </div>
+<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+  <p className="text-gray-400 text-sm">Projects</p>
+  <h2 className="mt-2 text-4xl font-bold text-cyan-400">
+    {loading ? "..." : stats.projects}
+  </h2>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+  <p className="text-gray-400 text-sm">Featured</p>
+  <h2 className="mt-2 text-4xl font-bold text-purple-400">
+    {loading ? "..." : stats.featuredProjects}
+  </h2>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+  <p className="text-gray-400 text-sm">Events</p>
+  <h2 className="mt-2 text-4xl font-bold text-blue-400">
+    {loading ? "..." : stats.events}
+  </h2>
+</div>
+
+<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+  <p className="text-gray-400 text-sm">Messages</p>
+  <h2 className="mt-2 text-4xl font-bold text-pink-400">
+    {loading ? "..." : stats.messages}
+  </h2>
+</div>
 
     </div>
 
@@ -129,37 +197,124 @@ setRecentIdeas(data ?? []);
 
     </div>
 
-    {/* Recent Activity */}
-    <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+    <div className="grid gap-6 lg:grid-cols-2">
 
-      <h2 className="text-2xl font-bold">
-  Recent Ideas
-</h2>
+  {/* Recent Ideas */}
 
-<div className="mt-6 space-y-4">
-  {recentIdeas.length === 0 ? (
-    <p className="text-gray-400">
-      No ideas submitted yet.
-    </p>
-  ) : (
-    recentIdeas.map((idea) => (
-      <div
-        key={idea.id}
-        className="rounded-xl border border-white/10 bg-[#0b1220] p-4"
-      >
-        <h3 className="font-semibold text-white">
-          {idea.idea_title}
-        </h3>
+  <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
 
-        <p className="mt-1 text-sm text-gray-400">
-          {idea.name}
+    <h2 className="text-2xl font-bold">
+      Recent Ideas
+    </h2>
+
+    <div className="mt-6 space-y-4">
+
+      {recentIdeas.length === 0 ? (
+
+        <p className="text-gray-400">
+          No ideas submitted yet.
         </p>
-      </div>
-    ))
-  )}
-</div>
+
+      ) : (
+
+        recentIdeas.map((idea) => (
+
+          <div
+            key={idea.id}
+            className="rounded-xl border border-white/10 bg-[#0b1220] p-4"
+          >
+
+            <div className="flex items-center justify-between">
+
+              <h3 className="font-semibold text-white">
+                {idea.idea_title}
+              </h3>
+
+              <span
+                className={`rounded-full px-3 py-1 text-xs ${
+                  idea.status === "Approved"
+                    ? "bg-green-500/20 text-green-400"
+                    : idea.status === "Pending"
+                    ? "bg-yellow-500/20 text-yellow-400"
+                    : "bg-red-500/20 text-red-400"
+                }`}
+              >
+                {idea.status}
+              </span>
+
+            </div>
+
+            <p className="mt-2 text-sm text-gray-400">
+              {idea.name}
+            </p>
+
+          </div>
+
+        ))
+
+      )}
 
     </div>
+
+  </div>
+
+  {/* Recent Messages */}
+
+  <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+
+    <h2 className="text-2xl font-bold">
+      Recent Messages
+    </h2>
+
+    <div className="mt-6 space-y-4">
+
+      {recentMessages.length === 0 ? (
+
+        <p className="text-gray-400">
+          No messages yet.
+        </p>
+
+      ) : (
+
+        recentMessages.map((msg) => (
+
+          <div
+            key={msg.id}
+            className="rounded-xl border border-white/10 bg-[#0b1220] p-4"
+          >
+
+            <div className="flex justify-between">
+
+              <h3 className="font-semibold text-white">
+                {msg.name}
+              </h3>
+
+              <span className="text-xs text-gray-500">
+                {new Date(msg.created_at).toLocaleDateString()}
+              </span>
+
+            </div>
+
+            <p className="mt-2 text-sm text-cyan-400">
+              {msg.subject}
+            </p>
+
+            <p className="mt-2 text-sm text-gray-400 line-clamp-2">
+              {msg.message}
+            </p>
+
+          </div>
+
+        ))
+
+      )}
+
+    </div>
+
+  </div>
+
+</div>
+    
 
   </div>
 );
