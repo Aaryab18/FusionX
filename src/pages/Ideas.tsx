@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { Lightbulb, Send, ThumbsUp,Handshake, Clock, Tag, ChevronDown } from 'lucide-react';
 import { supabase, type Idea } from '../lib/supabase';
 import {
@@ -88,10 +89,10 @@ export default function Ideas() {
   console.log("Returned error:", error);
 
   if (error) {
-    alert(error.message);
+    toast.error(error.message);
     setError(error.message);
   } else {
-    alert("Idea submitted successfully!");
+    toast.success("Idea submitted successfully!");
     setSuccess(true);
     setForm(initialForm);
     await fetchIdeas();
@@ -109,7 +110,7 @@ export default function Ideas() {
 
   // Check if already voted
   if (votedIdeas.includes(idea.id)) {
-    alert("You have already voted for this idea.");
+    toast.success("You have already voted for this idea.");
     return;
   }
 
@@ -139,7 +140,7 @@ console.log("Vote error:", err);
       )
     );
   } else {
-    alert("Failed to vote. Please try again.");
+    toast.success("Failed to vote. Please try again.");
   }
 
   setVotingId(null);

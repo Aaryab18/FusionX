@@ -18,6 +18,7 @@ export default function AdminDashboard() {
 const [loading, setLoading] = useState(true);
 const [recentIdeas, setRecentIdeas] = useState<any[]>([]);
 const [recentMessages, setRecentMessages] = useState<any[]>([]);
+const [recentProjects, setRecentProjects] = useState<any[]>([]);
 
 useEffect(() => {
   loadDashboardStats();
@@ -85,6 +86,14 @@ const { data: messages } = await supabase
 
 setRecentMessages(messages ?? []);
 
+const { data: projects } = await supabase
+  .from("projects")
+  .select("*")
+  .order("created_at", { ascending: false })
+  .limit(5);
+
+setRecentProjects(projects ?? []);
+
   setLoading(false);
 }
 
@@ -105,49 +114,70 @@ setRecentMessages(messages ?? []);
     {/* Stats */}
     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-7">
 
-      <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+      <div
+  onClick={() => navigate("/dashboard/ideas")}
+  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
+>
   <p className="text-gray-400 text-sm">Ideas</p>
   <h2 className="mt-2 text-4xl font-bold text-cyan-400">
     {loading ? "..." : stats.ideas}
   </h2>
 </div>
 
-<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+<div
+  onClick={() => navigate("/dashboard/ideas")}
+  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-yellow-500/40"
+>
   <p className="text-gray-400 text-sm">Pending</p>
   <h2 className="mt-2 text-4xl font-bold text-yellow-400">
     {loading ? "..." : stats.pendingIdeas}
   </h2>
 </div>
 
-<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+<div
+  onClick={() => navigate("/dashboard/ideas")}
+  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-green-500/40"
+>
   <p className="text-gray-400 text-sm">Approved</p>
   <h2 className="mt-2 text-4xl font-bold text-green-400">
     {loading ? "..." : stats.approvedIdeas}
   </h2>
 </div>
 
-<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+<div
+  onClick={() => navigate("/dashboard/projects")}
+  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
+>
   <p className="text-gray-400 text-sm">Projects</p>
   <h2 className="mt-2 text-4xl font-bold text-cyan-400">
     {loading ? "..." : stats.projects}
   </h2>
 </div>
 
-<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+<div
+  onClick={() => navigate("/dashboard/projects")}
+  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-purple-500/40"
+>
   <p className="text-gray-400 text-sm">Featured</p>
   <h2 className="mt-2 text-4xl font-bold text-purple-400">
     {loading ? "..." : stats.featuredProjects}
   </h2>
 </div>
 
-<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+<div
+  onClick={() => navigate("/dashboard/events")}
+  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
+>
   <p className="text-gray-400 text-sm">Events</p>
   <h2 className="mt-2 text-4xl font-bold text-blue-400">
     {loading ? "..." : stats.events}
   </h2>
 </div>
 
-<div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+<div
+  onClick={() => navigate("/dashboard/contact")}
+  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
+>
   <p className="text-gray-400 text-sm">Messages</p>
   <h2 className="mt-2 text-4xl font-bold text-pink-400">
     {loading ? "..." : stats.messages}
@@ -197,7 +227,7 @@ setRecentMessages(messages ?? []);
 
     </div>
 
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 lg:grid-cols-3">
 
   {/* Recent Ideas */}
 
@@ -312,6 +342,62 @@ setRecentMessages(messages ?? []);
     </div>
 
   </div>
+  <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">
+
+  <h2 className="text-2xl font-bold">
+    Recent Projects
+  </h2>
+
+  <div className="mt-6 space-y-4">
+
+    {recentProjects.length === 0 ? (
+
+      <p className="text-gray-400">
+        No projects yet.
+      </p>
+
+    ) : (
+
+      recentProjects.map((project) => (
+
+        <div
+          key={project.id}
+          className="rounded-xl border border-white/10 bg-[#0b1220] p-4"
+        >
+
+          <div className="flex justify-between">
+
+            <h3 className="font-semibold text-white">
+              {project.title}
+            </h3>
+
+            {project.featured && (
+
+              <span className="rounded-full bg-yellow-500/20 px-2 py-1 text-xs text-yellow-400">
+                Featured
+              </span>
+
+            )}
+
+          </div>
+
+          <p className="mt-2 text-sm text-cyan-400">
+            {project.category}
+          </p>
+
+          <p className="mt-2 text-sm text-gray-400">
+            {project.status}
+          </p>
+
+        </div>
+
+      ))
+
+    )}
+
+  </div>
+
+</div>
 
 </div>
     

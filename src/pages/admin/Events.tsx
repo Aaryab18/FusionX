@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { Link } from "react-router-dom";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import { toast } from "sonner";
 import EventFormModal from "../../components/admin/EventFormModal";
 
 type Event = {
@@ -49,7 +50,7 @@ const [selectedEvent, setSelectedEvent] = useState<any>(null);
     .eq("id", id);
 
   if (error) {
-    alert(error.message);
+    toast.error(error.message);
     return;
   }
 

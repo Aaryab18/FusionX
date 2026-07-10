@@ -21,7 +21,6 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminIdeas from './pages/admin/Ideas';
 import AdminProjects from './pages/admin/Projects';
 import AdminEvents from './pages/admin/Events';
-import JoinRequests from './pages/admin/JoinRequests';
 import ContactMessages from './pages/admin/ContactMessages';
 
 function WebsiteLayout({ children }: { children: React.ReactNode }) {
@@ -97,7 +96,6 @@ export default function App() {
           <Route path="ideas" element={<AdminIdeas />} />
           <Route path="projects" element={<AdminProjects />} />
           <Route path="events" element={<AdminEvents />} />
-          <Route path="join" element={<JoinRequests />} />
           <Route path="contact" element={<ContactMessages />} />
         </Route>
 

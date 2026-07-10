@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Eye, Search, Trash2 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import ContactViewModal from "../../components/admin/ContactViewModal";
+import { toast } from "sonner";
 
 type ContactMessage = {
   id: string;
@@ -61,7 +62,7 @@ console.log("Contact error:", error);
       .eq("id", id);
 
     if (error) {
-      alert(error.message);
+      toast.error(error.message);
       return;
     }
 

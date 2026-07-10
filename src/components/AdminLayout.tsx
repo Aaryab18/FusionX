@@ -28,7 +28,6 @@ export default function AdminLayout() {
     { name: "Ideas", path: "/dashboard/ideas", icon: <FaLightbulb /> },
     { name: "Projects", path: "/dashboard/projects", icon: <FaProjectDiagram /> },
     { name: "Events", path: "/dashboard/events", icon: <FaCalendarAlt /> },
-    { name: "Join Requests", path: "/dashboard/join", icon: <FaUsers /> },
     { name: "Contact", path: "/dashboard/contact", icon: <FaEnvelope /> },
   ];
 

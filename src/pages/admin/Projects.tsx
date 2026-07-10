@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Trash2, Pencil } from "lucide-react";
 import { supabase, Project } from "../../lib/supabase";
+import { toast } from "sonner";
 import ProjectFormModal from "../../components/admin/ProjectFormModal";
 import ProjectViewModal from "../../components/admin/ProjectViewModal";
 
@@ -44,7 +45,7 @@ export default function Projects() {
       .eq("id", id);
 
     if (error) {
-      alert(error.message);
+      toast.error(error.message);
       return;
     }
 

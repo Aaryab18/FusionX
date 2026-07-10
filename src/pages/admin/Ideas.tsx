@@ -3,6 +3,7 @@ import IdeaViewModal from "../../components/admin/IdeaViewModal";
 import { useEffect, useState } from "react";
 import { supabase, Idea } from "../../lib/supabase";
 import { Search, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Ideas() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
@@ -48,13 +49,13 @@ const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
       .eq("id", id);
 
     if (error) {
-      alert(error.message);
+      toast.error(error.message);
       return;
     }
 
     setIdeas((prev) => prev.filter((idea) => idea.id !== id));
 
-    alert("Idea deleted successfully!");
+    toast.success("Idea deleted successfully!");
   }
 
   async function updateStatus(
@@ -67,7 +68,7 @@ const [selectedIdea, setSelectedIdea] = useState<Idea | null>(null);
       .eq("id", id);
 
     if (error) {
-      alert(error.message);
+      toast.error(error.message);
       return;
     }
 
