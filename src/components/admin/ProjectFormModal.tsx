@@ -173,9 +173,9 @@ const { error } = await query;
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 overflow-y-auto">
 
-      <div className="w-full max-w-3xl rounded-2xl bg-[#0b1220] border border-white/10">
+      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-[#08111f] p-6">
 
         <div className="flex items-center justify-between border-b border-white/10 p-6">
 

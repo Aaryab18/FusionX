@@ -1,44 +1,11 @@
 import { useEffect, useState } from "react";
-import { Filter, Users, ThumbsUp } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Github, ExternalLink, Star } from "lucide-react";
 import { supabase } from "../lib/supabase";
-
-type Status = "Ongoing" | "Completed";
-
-type Project = {
-  id: string;
-  name: string;
-  year: string;
-  idea_title: string;
-  description: string;
-  skills_required: string;
-  votes: number;
-  status: Status;
-  team: string;
-  created_at: string;
-};
-
-const statusConfig = {
-  Ongoing: {
-    bg: "bg-blue-500/10",
-    text: "text-blue-400",
-    dot: "bg-blue-400",
-  },
-  Completed: {
-    bg: "bg-green-500/10",
-    text: "text-green-400",
-    dot: "bg-green-400",
-  },
-};
-
-const filters: ("All" | Status)[] = [
-  "All",
-  "Ongoing",
-  "Completed",
-];
+import type { Project } from "../lib/supabase";
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [active, setActive] = useState<"All" | Status>("All");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,10 +14,11 @@ export default function Projects() {
 
   async function fetchProjects() {
     const { data, error } = await supabase
-      .from("ideas")
+      .from("projects")
       .select("*")
       .in("status", ["Ongoing", "Completed"])
-      .order("votes", { ascending: false });
+      .order("featured", { ascending: false })
+      .order("created_at", { ascending: false });
 
     if (!error && data) {
       setProjects(data as Project[]);
@@ -59,189 +27,156 @@ export default function Projects() {
     setLoading(false);
   }
 
-  const filtered =
-    active === "All"
-      ? projects
-      : projects.filter((p) => p.status === active);
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#08111f] text-white">
+        Loading projects...
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#050a14] text-white pt-16">
+    <div className="min-h-screen bg-[#08111f] text-white pt-28 pb-20">
 
-      {/* Header */}
+      <div className="mx-auto max-w-7xl px-6">
 
-      <section className="relative py-24 overflow-hidden">
+        <div className="text-center mb-16">
 
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-blue-600/10 rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-
-          <span className="text-cyan-400 text-sm font-semibold uppercase tracking-widest block mb-4">
+          <h1 className="text-5xl font-bold">
             FusionX Projects
-          </span>
-
-          <h1 className="text-5xl sm:text-6xl font-black mb-6">
-            Building
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-              {" "}Ideas into Reality
-            </span>
           </h1>
 
-          <p className="text-gray-400 text-lg max-w-3xl mx-auto">
-            These are the projects currently being developed or successfully
-            completed by the FusionX community.
+          <p className="mt-5 text-lg text-gray-400 max-w-3xl mx-auto">
+            Explore innovative projects developed by FusionX members.
           </p>
 
         </div>
 
-      </section>
+        {projects.length === 0 ? (
 
-      {/* Filters */}
+          <div className="text-center py-24 text-gray-400">
+            No projects available.
+          </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+        ) : (
 
-        <div className="flex items-center gap-2 flex-wrap">
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-          <Filter size={16} className="text-gray-500 mr-2" />
+            {projects.map((project) => (
 
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActive(filter)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                active === filter
-                  ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white"
-                  : "bg-white/5 text-gray-400 hover:bg-white/10"
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
+              <div
+                key={project.id}
+                className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition hover:-translate-y-1 hover:border-cyan-500/40"
+              >
 
-        </div>
+                {project.image_url && (
+
+                  <img
+                    src={project.image_url}
+                    alt={project.title}
+                    className="h-56 w-full object-cover"
+                  />
+
+                )}
+
+                <div className="p-6">
+
+                  <div className="flex items-center gap-2 mb-3">
+
+                    <span className="rounded-full bg-cyan-500/20 px-3 py-1 text-xs text-cyan-300">
+                      {project.category}
+                    </span>
+
+                    <span className="rounded-full bg-blue-500/20 px-3 py-1 text-xs text-blue-300">
+                      {project.status}
+                    </span>
+
+                    {project.featured && (
+
+                      <span className="rounded-full bg-yellow-500/20 px-3 py-1 text-xs text-yellow-300 flex items-center gap-1">
+
+                        <Star size={12} />
+
+                        Featured
+
+                      </span>
+
+                    )}
+
+                  </div>
+
+                  <h2 className="text-2xl font-bold">
+                    {project.title}
+                  </h2>
+
+                  <p className="mt-3 text-gray-400 line-clamp-3">
+                    {project.short_description}
+                  </p>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+
+                    {project.tech_stack.map((tech) => (
+
+                      <span
+                        key={tech}
+                        className="rounded-full bg-white/10 px-3 py-1 text-sm"
+                      >
+                        {tech}
+                      </span>
+
+                    ))}
+
+                  </div>
+
+                  <div className="mt-6 flex gap-3">
+
+                    <Link
+                      to={`/projects/${project.slug}`}
+                      className="flex-1 rounded-xl border border-cyan-500 py-3 text-center font-semibold text-cyan-400 hover:bg-cyan-500 hover:text-black transition"
+                    >
+                      View Details
+                    </Link>
+
+                    {project.github_url && (
+
+                      <a
+                        href={project.github_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-xl bg-white/10 p-3 hover:bg-white/20"
+                      >
+                        <Github size={20} />
+                      </a>
+
+                    )}
+
+                    {project.demo_url && (
+
+                      <a
+                        href={project.demo_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-xl bg-cyan-500 p-3 text-black hover:bg-cyan-400"
+                      >
+                        <ExternalLink size={20} />
+                      </a>
+
+                    )}
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        )}
 
       </div>
 
-      {/* Projects */}
-
-      <section className="pb-24">
-
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          {loading ? (
-
-            <p className="text-center text-gray-400">
-              Loading projects...
-            </p>
-
-          ) : filtered.length === 0 ? (
-
-            <p className="text-center text-gray-500">
-              No projects available.
-            </p>
-
-          ) : (
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">              {filtered.map((project) => {
-                const sc = statusConfig[project.status];
-
-                return (
-                  <div
-                    key={project.id}
-                    className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-blue-500/40 hover:-translate-y-1 transition-all duration-300"
-                  >
-                    <img
-                      src="https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=600"
-                      alt={project.idea_title}
-                      className="w-full h-48 object-cover"
-                    />
-
-                    <div className="p-6">
-
-                      <div className="flex items-center justify-between mb-4">
-
-                        <span
-                          className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${sc.bg} ${sc.text}`}
-                        >
-                          <span
-                            className={`w-2 h-2 rounded-full ${sc.dot}`}
-                          />
-                          {project.status}
-                        </span>
-
-                        <div className="flex items-center gap-1 text-gray-400 text-sm">
-                          <ThumbsUp size={15} />
-                          {project.votes}
-                        </div>
-
-                      </div>
-
-                      <h2 className="text-xl font-bold text-white mb-3">
-                        {project.idea_title}
-                      </h2>
-
-                      <p className="text-gray-400 text-sm leading-relaxed mb-5">
-                        {project.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-2 mb-5">
-                        {project.skills_required
-                          ?.split(",")
-                          .map((skill) => (
-                            <span
-                              key={skill}
-                              className="px-2 py-1 rounded-md bg-blue-500/10 text-blue-300 text-xs border border-blue-500/20"
-                            >
-                              {skill.trim()}
-                            </span>
-                          ))}
-                      </div>
-
-                      <div className="border-t border-white/10 pt-4 space-y-2 text-sm">
-
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">
-                            Submitted By
-                          </span>
-
-                          <span className="text-white">
-                            {project.name}
-                          </span>
-                        </div>
-
-                        <div className="flex justify-between">
-                          <span className="text-gray-500">
-                            Year
-                          </span>
-
-                          <span className="text-white">
-                            {project.year}
-                          </span>
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-500 flex items-center gap-1">
-                            <Users size={15} />
-                            Team
-                          </span>
-
-                          <span className="text-cyan-400 font-medium">
-                            {project.team}
-                          </span>
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </section>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Trash2, Pencil } from "lucide-react";
 import { supabase, Project } from "../../lib/supabase";
 import ProjectFormModal from "../../components/admin/ProjectFormModal";
+import ProjectViewModal from "../../components/admin/ProjectViewModal";
 
 export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -9,6 +10,7 @@ export default function Projects() {
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [viewOpen, setViewOpen] = useState(false);
 
   async function fetchProjects() {
     setLoading(true);
@@ -194,6 +196,17 @@ export default function Projects() {
                   <td className="px-5 py-4">
   <div className="flex items-center gap-2">
 
+  <button
+  onClick={() => {
+    setSelectedProject(project);
+    setViewOpen(true);
+  }}
+  className="p-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 transition"
+  title="View"
+>
+  👁
+</button>
+
     <button
       onClick={() => {
         setSelectedProject(project);
@@ -238,6 +251,14 @@ export default function Projects() {
     setSelectedProject(null);
   }}
   onSuccess={fetchProjects}
+/>
+<ProjectViewModal
+  open={viewOpen}
+  project={selectedProject}
+  onClose={() => {
+    setViewOpen(false);
+    setSelectedProject(null);
+  }}
 />
 
     </div>
