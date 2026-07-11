@@ -1,4 +1,4 @@
-import { Github, Linkedin, Twitter } from 'lucide-react';
+import { Github, Linkedin } from 'lucide-react';
 
 type Member = {
   name: string;
@@ -15,7 +15,7 @@ const coreTeam: Member[] = [
     role: 'President',
     year: '2nd Year',
     avatar: 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=300',
-    socials: { github: '#', linkedin: '#', twitter: '#' },
+    socials: { github: '#', linkedin: '#' },
     specialty: 'Full-Stack · AI/ML',
   },
   {
@@ -36,10 +36,10 @@ const coreTeam: Member[] = [
   },
   {
     name: 'Priyanka',
-    role: 'Design Lead',
+    role: 'Marketing',
     year: '2nd Year',
     avatar: 'https://imgcdn.stablediffusionweb.com/2024/10/2/e422911e-e632-4a91-a4af-110348c278f4.jpg?auto=compress&cs=tinysrgb&w=300',
-    socials: { github: '#', linkedin: '#', twitter: '#' },
+    socials: { github: '#', linkedin: '#' },
     specialty: 'UI/UX · Branding',
   },
   {
@@ -47,12 +47,12 @@ const coreTeam: Member[] = [
     role: 'Events & Community',
     year: '2nd Year',
     avatar: 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=300',
-    socials: { linkedin: '#', twitter: '#' },
+    socials: { github: '#', linkedin: '#' },
     specialty: 'Community · Marketing',
   },
   {
     name: 'Ananya',
-    role: 'Operations lead',
+    role: 'Operations',
     year: '2nd Year',
     avatar: 'https://imgcdn.stablediffusionweb.com/2025/4/18/2a4f52aa-4348-4764-a494-94f69948de8c.jpg?auto=compress&cs=tinysrgb&w=300',
     socials: { github: '#', linkedin: '#' },
@@ -74,7 +74,7 @@ const mentors: Member[] = [
     role: 'Industry Mentor · Google',
     year: 'Alumni \'21',
     avatar: 'https://images.pexels.com/photos/1181424/pexels-photo-1181424.jpeg?auto=compress&cs=tinysrgb&w=300',
-    socials: { linkedin: '#', twitter: '#' },
+    socials: { linkedin: '#'},
     specialty: 'Product · Cloud',
   },
   {
@@ -82,7 +82,7 @@ const mentors: Member[] = [
     role: 'Startup Mentor · Founder',
     year: 'Alumni \'19',
     avatar: 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=300',
-    socials: { linkedin: '#', twitter: '#' },
+    socials: { linkedin: '#'},
     specialty: 'Startup · Business',
   },
 ];
@@ -147,11 +147,6 @@ function MemberCard({ member, size = 'md' }: { member: Member; size?: 'lg' | 'md
             {member.socials.linkedin && (
               <a href={member.socials.linkedin} className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-gray-500 hover:text-blue-400 hover:bg-blue-400/10 transition-all">
                 <Linkedin size={13} />
-              </a>
-            )}
-            {member.socials.twitter && (
-              <a href={member.socials.twitter} className="w-7 h-7 rounded-lg bg-white/5 flex items-center justify-center text-gray-500 hover:text-cyan-400 hover:bg-cyan-400/10 transition-all">
-                <Twitter size={13} />
               </a>
             )}
           </div>
