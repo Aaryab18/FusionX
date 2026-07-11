@@ -103,44 +103,45 @@ export default function Ideas() {
 
   async function handleVote(idea: Idea) {
 
-  // Get previously voted ideas from browser
-  const votedIdeas = JSON.parse(
-    localStorage.getItem("votedIdeas") || "[]"
-  );
+  let voterId = localStorage.getItem("fusionx_voter");
 
-  // Check if already voted
-  if (votedIdeas.includes(idea.id)) {
-    toast.success("You have already voted for this idea.");
-    return;
+  if (!voterId) {
+    voterId = crypto.randomUUID();
+    localStorage.setItem("fusionx_voter", voterId);
   }
 
   setVotingId(idea.id);
 
-  const { data, error: err } = await supabase
-  .from("ideas")
-  .update({ votes: idea.votes + 1 })
-  .eq("id", idea.id)
-  .select();
+  const { data, error: err } = await supabase.rpc(
+    "increment_idea_votes",
+    {
+      idea_id: idea.id,
+      voter_id: voterId,
+    }
+  );
 
-console.log("Vote update:", data);
-console.log("Vote error:", err);
+  console.log("Vote error:", err);
 
-  if (!err) {
-    // Save this vote in browser
-    votedIdeas.push(idea.id);
-    localStorage.setItem(
-      "votedIdeas",
-      JSON.stringify(votedIdeas)
-    );
+  if (!err && data) {
 
-    // Update UI immediately
     setIdeas((prev) =>
       prev.map((i) =>
-        i.id === idea.id ? { ...i, votes: i.votes + 1 } : i
+        i.id === idea.id
+          ? { ...i, votes: i.votes + 1 }
+          : i
       )
     );
+
+    toast.success("Vote submitted!");
+
+  } else if (!err && !data) {
+
+    toast.error("You have already voted.");
+
   } else {
-    toast.success("Failed to vote. Please try again.");
+
+    toast.error("Failed to vote.");
+
   }
 
   setVotingId(null);

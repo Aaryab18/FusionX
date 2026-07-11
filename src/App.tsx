@@ -14,7 +14,7 @@ import Events from './pages/Events';
 import Team from './pages/Team';
 import Resources from './pages/Resources';
 import Contact from './pages/Contact';
-
+import NotFound from "./pages/NotFound";
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
 
@@ -97,6 +97,7 @@ export default function App() {
           <Route path="projects" element={<AdminProjects />} />
           <Route path="events" element={<AdminEvents />} />
           <Route path="contact" element={<ContactMessages />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
 
       </Routes>
