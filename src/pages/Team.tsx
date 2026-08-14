@@ -20,7 +20,7 @@ const coreTeam: Member[] = [
   },
   {
     name: 'Akshay',
-    role: 'Vice President & UI Lead',
+    role: 'Vice President and UI lead',
     year: '2nd Year',
     avatar: 'https://tse3.mm.bing.net/th/id/OIP.Dn-8K_TiXbuob_1fMEFurQAAAA?rs=1&pid=ImgDetMain&o=7&rm=3&auto=compress&cs=tinysrgb&w=300',
     socials: { github: '#', linkedin: '#' },
@@ -85,11 +85,11 @@ const mentors: Member[] = [
     socials: { linkedin: '#'},
     specialty: 'Startup · Business',
   },
-];
+];  
 
 const contributors: Member[] = [
   {
-    name: 'Aditi Singh',
+    name: 'Anik loha',
     role: 'Frontend Developer',
     year: '2nd Year',
     avatar: 'https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=300',
