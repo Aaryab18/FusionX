@@ -17,11 +17,13 @@ import Contact from './pages/Contact';
 import NotFound from "./pages/NotFound";
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminDashboard from './pages/admin/AdminDashboard';
-
+import Register from "./pages/Register";
 import AdminIdeas from './pages/admin/Ideas';
 import AdminProjects from './pages/admin/Projects';
 import AdminEvents from './pages/admin/Events';
 import ContactMessages from './pages/admin/ContactMessages';
+import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 
 function WebsiteLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -62,6 +64,9 @@ export default function App() {
         <Route path="/team" element={<WebsiteLayout><Team /></WebsiteLayout>} />
         <Route path="/resources" element={<WebsiteLayout><Resources /></WebsiteLayout>} />
         <Route path="/contact" element={<WebsiteLayout><Contact /></WebsiteLayout>} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/events/:slug" element={<EventDetails />} />
         <Route
   path="/projects"

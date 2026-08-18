@@ -34,6 +34,22 @@ export type Project = {
 export type ContactMessage = {
   id?: string;
   name: string;
+  usn: string;
   email: string;
+  phone: string;
+  subject: string;
   message: string;
+  created_at?: string;
+};
+
+export type Profile = {
+  id: string;
+  name: string;
+  usn: string;
+  department: string;
+  email: string;
+  avatar_url: string | null;
+  bio: string | null;
+  skills: string[] | null;
+  created_at: string;
 };
