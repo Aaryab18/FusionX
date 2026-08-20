@@ -24,6 +24,7 @@ import AdminEvents from './pages/admin/Events';
 import ContactMessages from './pages/admin/ContactMessages';
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import Milestones from "./pages/admin/Milestones";
 
 function WebsiteLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -60,6 +61,10 @@ export default function App() {
   }
 />
         <Route path="/ideas" element={<WebsiteLayout><Ideas /></WebsiteLayout>} />
+        <Route
+  path="/dashboard/milestones"
+  element={<Milestones />}
+/>
         <Route path="/events" element={<WebsiteLayout><Events /></WebsiteLayout>} />
         <Route path="/team" element={<WebsiteLayout><Team /></WebsiteLayout>} />
         <Route path="/resources" element={<WebsiteLayout><Resources /></WebsiteLayout>} />

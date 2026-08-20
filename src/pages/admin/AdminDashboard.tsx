@@ -13,6 +13,7 @@ export default function AdminDashboard() {
   featuredProjects: 0,
   messages: 0,
   events: 0,
+  milestones: 0,
 });
 
 const [loading, setLoading] = useState(true);
@@ -33,6 +34,7 @@ async function loadDashboardStats() {
   approvedIdeasResult,
   projectsResult,
   featuredProjectsResult,
+  milestonesResult,
   messagesResult,
 ] = await Promise.all([
   supabase.from("ideas").select("*", { count: "exact", head: true }),
@@ -57,6 +59,10 @@ async function loadDashboardStats() {
     .eq("featured", true),
 
   supabase
+    .from("milestones")
+    .select("*", { count: "exact", head: true }),
+
+  supabase
     .from("contact_messages")
     .select("*", { count: "exact", head: true }),
 ]);
@@ -67,6 +73,7 @@ async function loadDashboardStats() {
   approvedIdeas: approvedIdeasResult.count ?? 0,
   projects: projectsResult.count ?? 0,
   featuredProjects: featuredProjectsResult.count ?? 0,
+  milestones: milestonesResult.count ?? 0,
   messages: messagesResult.count ?? 0,
   events: events.length,
 });
@@ -111,80 +118,108 @@ setRecentProjects(projects ?? []);
       </p>
     </div>
 
+
     {/* Stats */}
-    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-7">
+<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 
-      <div
-  onClick={() => navigate("/dashboard/ideas")}
-  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
->
-  <p className="text-gray-400 text-sm">Ideas</p>
-  <h2 className="mt-2 text-4xl font-bold text-cyan-400">
-    {loading ? "..." : stats.ideas}
-  </h2>
+  {/* Ideas */}
+  <div
+    onClick={() => navigate("/dashboard/ideas")}
+    className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
+  >
+    <p className="text-gray-400 text-sm">Ideas</p>
+
+    <h2 className="mt-2 text-4xl font-bold text-cyan-400">
+      {loading ? "..." : stats.ideas}
+    </h2>
+  </div>
+
+  {/* Pending */}
+  <div
+    onClick={() => navigate("/dashboard/ideas")}
+    className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-yellow-500/40"
+  >
+    <p className="text-gray-400 text-sm">Pending</p>
+
+    <h2 className="mt-2 text-4xl font-bold text-yellow-400">
+      {loading ? "..." : stats.pendingIdeas}
+    </h2>
+  </div>
+
+  {/* Approved */}
+  <div
+    onClick={() => navigate("/dashboard/ideas")}
+    className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-green-500/40"
+  >
+    <p className="text-gray-400 text-sm">Approved</p>
+
+    <h2 className="mt-2 text-4xl font-bold text-green-400">
+      {loading ? "..." : stats.approvedIdeas}
+    </h2>
+  </div>
+
+  {/* Projects */}
+  <div
+    onClick={() => navigate("/dashboard/projects")}
+    className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
+  >
+    <p className="text-gray-400 text-sm">Projects</p>
+
+    <h2 className="mt-2 text-4xl font-bold text-cyan-400">
+      {loading ? "..." : stats.projects}
+    </h2>
+  </div>
+
+  {/* Featured */}
+  <div
+    onClick={() => navigate("/dashboard/projects")}
+    className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-purple-500/40"
+  >
+    <p className="text-gray-400 text-sm">Featured</p>
+
+    <h2 className="mt-2 text-4xl font-bold text-purple-400">
+      {loading ? "..." : stats.featuredProjects}
+    </h2>
+  </div>
+
+  {/* Events */}
+  <div
+    onClick={() => navigate("/dashboard/events")}
+    className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
+  >
+    <p className="text-gray-400 text-sm">Events</p>
+
+    <h2 className="mt-2 text-4xl font-bold text-cyan-400">
+      {loading ? "..." : stats.events}
+    </h2>
+  </div>
+
+  {/* Milestones */}
+  <div
+    onClick={() => navigate("/dashboard/milestones")}
+    className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-yellow-500/40"
+  >
+    <p className="text-gray-400 text-sm">Milestones</p>
+
+    <h2 className="mt-2 text-4xl font-bold text-yellow-400">
+      {loading ? "..." : stats.milestones}
+    </h2>
+  </div>
+
+  {/* Messages */}
+  <div
+    onClick={() => navigate("/dashboard/contact")}
+    className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
+  >
+    <p className="text-gray-400 text-sm">Messages</p>
+
+    <h2 className="mt-2 text-4xl font-bold text-cyan-400">
+      {loading ? "..." : stats.messages}
+    </h2>
+  </div>
+
 </div>
 
-<div
-  onClick={() => navigate("/dashboard/ideas")}
-  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-yellow-500/40"
->
-  <p className="text-gray-400 text-sm">Pending</p>
-  <h2 className="mt-2 text-4xl font-bold text-yellow-400">
-    {loading ? "..." : stats.pendingIdeas}
-  </h2>
-</div>
-
-<div
-  onClick={() => navigate("/dashboard/ideas")}
-  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-green-500/40"
->
-  <p className="text-gray-400 text-sm">Approved</p>
-  <h2 className="mt-2 text-4xl font-bold text-green-400">
-    {loading ? "..." : stats.approvedIdeas}
-  </h2>
-</div>
-
-<div
-  onClick={() => navigate("/dashboard/projects")}
-  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
->
-  <p className="text-gray-400 text-sm">Projects</p>
-  <h2 className="mt-2 text-4xl font-bold text-cyan-400">
-    {loading ? "..." : stats.projects}
-  </h2>
-</div>
-
-<div
-  onClick={() => navigate("/dashboard/projects")}
-  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-purple-500/40"
->
-  <p className="text-gray-400 text-sm">Featured</p>
-  <h2 className="mt-2 text-4xl font-bold text-purple-400">
-    {loading ? "..." : stats.featuredProjects}
-  </h2>
-</div>
-
-<div
-  onClick={() => navigate("/dashboard/events")}
-  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
->
-  <p className="text-gray-400 text-sm">Events</p>
-  <h2 className="mt-2 text-4xl font-bold text-blue-400">
-    {loading ? "..." : stats.events}
-  </h2>
-</div>
-
-<div
-  onClick={() => navigate("/dashboard/contact")}
-  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-cyan-500/40"
->
-  <p className="text-gray-400 text-sm">Messages</p>
-  <h2 className="mt-2 text-4xl font-bold text-pink-400">
-    {loading ? "..." : stats.messages}
-  </h2>
-</div>
-
-    </div>
 
     {/* Quick Actions */}
     <div className="rounded-2xl border border-white/10 bg-[#101827] p-6">

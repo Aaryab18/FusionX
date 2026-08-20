@@ -10,6 +10,7 @@ import {
   FaSignOutAlt,
   FaBars,
   FaTimes,
+  FaTrophy,
 } from "react-icons/fa";
 import { supabase } from "../lib/supabase";
 
@@ -24,12 +25,13 @@ export default function AdminLayout() {
   }
 
   const menu = [
-    { name: "Dashboard", path: "/dashboard", icon: <FaHome /> },
-    { name: "Ideas", path: "/dashboard/ideas", icon: <FaLightbulb /> },
-    { name: "Projects", path: "/dashboard/projects", icon: <FaProjectDiagram /> },
-    { name: "Events", path: "/dashboard/events", icon: <FaCalendarAlt /> },
-    { name: "Contact", path: "/dashboard/contact", icon: <FaEnvelope /> },
-  ];
+  { name: "Dashboard", path: "/dashboard", icon: <FaHome /> },
+  { name: "Ideas", path: "/dashboard/ideas", icon: <FaLightbulb /> },
+  { name: "Projects", path: "/dashboard/projects", icon: <FaProjectDiagram /> },
+  { name: "Events", path: "/dashboard/events", icon: <FaCalendarAlt /> },
+  { name: "Milestones", path: "/dashboard/milestones", icon: <FaTrophy /> },
+  { name: "Contact", path: "/dashboard/contact", icon: <FaEnvelope /> },
+];
 
   return (
     <div className="flex min-h-screen bg-[#050a14] text-white">
