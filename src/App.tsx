@@ -25,6 +25,7 @@ import ContactMessages from './pages/admin/ContactMessages';
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Milestones from "./pages/admin/Milestones";
+import MyMilestones from "./pages/MyMilestones.";
 
 function WebsiteLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -64,6 +65,10 @@ export default function App() {
         <Route
   path="/dashboard/milestones"
   element={<Milestones />}
+/>
+<Route
+  path="/milestones"
+  element={<MyMilestones />}
 />
         <Route path="/events" element={<WebsiteLayout><Events /></WebsiteLayout>} />
         <Route path="/team" element={<WebsiteLayout><Team /></WebsiteLayout>} />

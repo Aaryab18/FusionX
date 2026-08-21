@@ -23,7 +23,8 @@ const [recentProjects, setRecentProjects] = useState<any[]>([]);
 
 useEffect(() => {
   loadDashboardStats();
-}, []);
+}, []); 
+
 
 async function loadDashboardStats() {
   setLoading(true);
