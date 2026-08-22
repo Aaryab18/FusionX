@@ -26,6 +26,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Milestones from "./pages/admin/Milestones";
 import MyMilestones from "./pages/MyMilestones.";
+import StudentAuth from "./pages/StudentAuth";
 
 function WebsiteLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -97,6 +98,8 @@ export default function App() {
 
         {/* Admin Login */}
         <Route path="/admin" element={<AdminLogin />} />
+        {/* Student Login / Register */}
+<Route path="/student-auth" element={<StudentAuth />} />
 
         {/* Protected Admin */}
         <Route
