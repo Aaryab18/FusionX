@@ -86,19 +86,19 @@ export default function Milestones() {
     );
 
     if (coinError) {
-      // Roll back approval if coin award failed
-      await supabase
-        .from("milestones")
-        .update({
-          status: "pending",
-          approved_by: null,
-          approved_at: null,
-        })
-        .eq("id", milestone.id);
+  // Roll back approval if coin award failed
+  await supabase
+    .from("milestones")
+    .update({
+      status: "pending",
+      approved_by: null,
+      approved_at: null,
+    })
+    .eq("id", milestone.id);
 
-      toast.error("Milestone approved but coins could not be awarded.");
-      return;
-    }
+  toast.error("Milestone approved but coins could not be awarded.");
+  return;
+}
 
     toast.success(
       `${milestone.coins_reward} Fusion Coins awarded successfully.`

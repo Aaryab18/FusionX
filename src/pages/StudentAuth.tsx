@@ -59,7 +59,7 @@ export default function StudentAuth() {
 
         toast.success("Login successful!");
 
-        navigate("/milestones");
+        navigate("/student-dashboard");
       }
     } finally {
       setLoading(false);
