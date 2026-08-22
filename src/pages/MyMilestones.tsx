@@ -222,47 +222,69 @@ const [submitting, setSubmitting] = useState(false);
         ) : (
           <div className="space-y-4">
             {milestones.map((milestone) => (
-              <div
-                key={milestone.id}
-                className="rounded-2xl border border-white/10 bg-[#101827] p-6"
-              >
-                <div className="flex flex-col justify-between gap-4 md:flex-row">
-                  <div>
-                    <h2 className="text-xl font-semibold">
-                      {milestone.title}
-                    </h2>
+  <div
+    key={milestone.id}
+    className="rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:border-cyan-500/30"
+  >
+    <div className="flex flex-col justify-between gap-4 md:flex-row">
+      <div>
+        <h2 className="text-xl font-semibold">
+          {milestone.title}
+        </h2>
 
-                    {milestone.description && (
-                      <p className="mt-2 text-gray-400">
-                        {milestone.description}
-                      </p>
-                    )}
-                  </div>
+        {milestone.description && (
+          <p className="mt-2 text-gray-400">
+            {milestone.description}
+          </p>
+        )}
+      </div>
 
-                  <div className="text-yellow-400 font-semibold">
-                    +{milestone.coins_reward} 🪙
-                  </div>
-                </div>
+      <div className="text-yellow-400 font-semibold">
+        +{milestone.coins_reward} 🪙
+      </div>
+    </div>
 
-                <div className="mt-5 flex items-center justify-between">
-                  <span
-                    className={`rounded-full px-3 py-1 text-sm ${
-                      milestone.status === "approved"
-                        ? "bg-green-500/10 text-green-400"
-                        : milestone.status === "rejected"
-                        ? "bg-red-500/10 text-red-400"
-                        : "bg-yellow-500/10 text-yellow-400"
-                    }`}
-                  >
-                    {milestone.status}
-                  </span>
+    <div className="mt-5 flex items-center justify-between">
+      <span
+        className={`rounded-full px-3 py-1 text-sm font-medium ${
+          milestone.status === "approved"
+            ? "bg-green-500/10 text-green-400"
+            : milestone.status === "rejected"
+            ? "bg-red-500/10 text-red-400"
+            : "bg-yellow-500/10 text-yellow-400"
+        }`}
+      >
+        {milestone.status === "approved"
+          ? "✓ Approved"
+          : milestone.status === "rejected"
+          ? "✕ Rejected"
+          : "⏳ Pending"}
+      </span>
 
-                  <span className="text-xs text-gray-500">
-                    {new Date(milestone.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            ))}
+      <span className="text-xs text-gray-500">
+        {new Date(milestone.created_at).toLocaleDateString()}
+      </span>
+    </div>
+
+    {milestone.status === "approved" && (
+      <div className="mt-4 rounded-lg border border-green-500/10 bg-green-500/5 px-4 py-3 text-sm text-green-400">
+        ✓ Milestone approved — {milestone.coins_reward} Fusion Coins awarded
+      </div>
+    )}
+
+    {milestone.status === "pending" && (
+      <div className="mt-4 rounded-lg border border-yellow-500/10 bg-yellow-500/5 px-4 py-3 text-sm text-yellow-400">
+        ⏳ Waiting for admin review
+      </div>
+    )}
+
+    {milestone.status === "rejected" && (
+      <div className="mt-4 rounded-lg border border-red-500/10 bg-red-500/5 px-4 py-3 text-sm text-red-400">
+        ✕ This milestone was rejected by the admin.
+      </div>
+    )}
+  </div>
+))}
           </div>
         )}
 

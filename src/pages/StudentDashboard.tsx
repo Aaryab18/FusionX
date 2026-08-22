@@ -8,6 +8,7 @@ export default function StudentDashboard() {
 
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [coins, setCoins] = useState(0);
 
   useEffect(() => {
     async function loadStudent() {
@@ -41,6 +42,22 @@ export default function StudentDashboard() {
 
       setName(profile.name || "Student");
       setLoading(false);
+
+      const { data: coinData, error: coinError } = await supabase
+  .from("coins")
+  .select("amount")
+  .eq("student_id", user.id);
+
+if (coinError) {
+  console.error("Coins error:", coinError);
+} else {
+  const totalCoins = (coinData || []).reduce(
+    (total, coin) => total + (coin.amount || 0),
+    0
+  );
+
+  setCoins(totalCoins);
+}
     }
 
     loadStudent();
@@ -84,8 +101,8 @@ export default function StudentDashboard() {
             </p>
 
             <h2 className="mt-3 text-4xl font-bold text-yellow-400">
-              🪙 0
-            </h2>
+  🪙 {coins}
+</h2>
 
             <p className="mt-2 text-sm text-gray-500">
               Earn coins by completing milestones.
@@ -109,7 +126,10 @@ export default function StudentDashboard() {
             </p>
           </div>
 
-          <div className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-purple-500/40">
+          <div
+  onClick={() => navigate("/leaderboard")}
+  className="cursor-pointer rounded-2xl border border-white/10 bg-[#101827] p-6 transition hover:scale-[1.02] hover:border-purple-500/40"
+>
             <p className="text-sm text-gray-400">
               Leaderboard
             </p>

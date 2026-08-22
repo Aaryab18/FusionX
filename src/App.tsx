@@ -27,6 +27,7 @@ import Profile from "./pages/Profile";
 import Milestones from "./pages/admin/Milestones";
 import MyMilestones from "./pages/MyMilestones";
 import StudentAuth from "./pages/StudentAuth";
+import Leaderboard from "./pages/Leaderboard";
 import StudentDashboard from "./pages/StudentDashboard";
 
 function WebsiteLayout({ children }: { children: React.ReactNode }) {
@@ -101,6 +102,7 @@ export default function App() {
         <Route path="/admin" element={<AdminLogin />} />
         {/* Student Login / Register */}
 <Route path="/student-auth" element={<StudentAuth />} />
+<Route path="/leaderboard" element={<Leaderboard />} />
 
 <Route
   path="/student-dashboard"

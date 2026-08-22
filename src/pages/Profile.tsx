@@ -19,7 +19,9 @@ export default function Profile() {
   const navigate = useNavigate();
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
-  const [loading, setLoading] = useState(true);
+const [loading, setLoading] = useState(true);
+const [coins, setCoins] = useState(0);
+const [milestoneCount, setMilestoneCount] = useState(0);
 
   useEffect(() => {
     loadProfile();
@@ -51,7 +53,35 @@ export default function Profile() {
     }
 
     setProfile(data);
-    setLoading(false);
+
+const { data: coinData, error: coinError } = await supabase
+  .from("coins")
+  .select("amount")
+  .eq("student_id", user.id);
+
+if (coinError) {
+  console.error("Coins error:", coinError);
+} else {
+  const totalCoins = (coinData || []).reduce(
+    (total, coin) => total + (coin.amount || 0),
+    0
+  );
+
+  setCoins(totalCoins);
+}
+
+const { count: milestoneTotal, error: milestoneError } = await supabase
+  .from("milestones")
+  .select("id", { count: "exact", head: true })
+  .eq("student_id", user.id);
+
+if (milestoneError) {
+  console.error("Milestones error:", milestoneError);
+} else {
+  setMilestoneCount(milestoneTotal || 0);
+}
+
+setLoading(false);
   }
 
   async function handleLogout() {
@@ -155,7 +185,7 @@ export default function Profile() {
 
             <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5 text-center">
               <p className="text-3xl font-bold text-cyan-400">
-                0
+                {coins}
               </p>
 
               <p className="mt-1 text-sm text-gray-400">
@@ -165,7 +195,7 @@ export default function Profile() {
 
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
               <p className="text-3xl font-bold">
-                0
+                {milestoneCount}
               </p>
 
               <p className="mt-1 text-sm text-gray-400">

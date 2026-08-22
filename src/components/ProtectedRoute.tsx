@@ -8,21 +8,40 @@ export default function ProtectedRoute({
   children: JSX.Element;
 }) {
   const [loading, setLoading] = useState(true);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    async function checkUser() {
+    async function checkAdmin() {
       const {
         data: { session },
       } = await supabase.auth.getSession();
 
-      console.log("Session:", session);
+      if (!session?.user) {
+        setLoading(false);
+        return;
+      }
 
-      setLoggedIn(!!session);
+      // Check the user's role from profiles
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", session.user.id)
+        .single();
+
+      console.log("Admin check:", {
+        user: session.user.email,
+        role: profile?.role,
+        error,
+      });
+
+      if (profile?.role === "admin") {
+        setIsAdmin(true);
+      }
+
       setLoading(false);
     }
 
-    checkUser();
+    checkAdmin();
   }, []);
 
   if (loading) {
@@ -33,8 +52,8 @@ export default function ProtectedRoute({
     );
   }
 
-  if (!loggedIn) {
-    return <Navigate to="/admin" replace />;
+  if (!isAdmin) {
+    return <Navigate to="/student-auth" replace />;
   }
 
   return children;
